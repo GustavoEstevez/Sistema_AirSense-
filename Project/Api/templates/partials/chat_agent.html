@@ -1,0 +1,63 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/chat-agent.css' %}"/>
+
+<div class="airsense-chat" id="airsenseChat">
+  <div class="airsense-chat__panel" role="dialog" aria-label="Asistente virtual AirSense" aria-hidden="true">
+    <div class="airsense-chat__header">
+      <div class="airsense-chat__avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.5" y="8.5" width="17" height="11" rx="2.5"/>
+          <circle cx="9" cy="13.5" r="1.4"/>
+          <circle cx="15" cy="13.5" r="1.4"/>
+          <path d="M9.5 17.5h5"/>
+          <path d="M12 8.5V5"/>
+          <circle cx="12" cy="3.6" r="1.2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="airsense-chat__title">Asistente AirSense</div>
+        <div class="airsense-chat__subtitle">Preguntas frecuentes del proyecto</div>
+      </div>
+    </div>
+
+    <div class="airsense-chat__messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+    <div class="airsense-chat__suggestions" aria-label="Preguntas sugeridas"></div>
+
+    <form class="airsense-chat__form">
+      <input
+        type="text"
+        class="airsense-chat__input"
+        placeholder="Escribí tu pregunta..."
+        autocomplete="off"
+        maxlength="300"
+        aria-label="Escribir pregunta"
+      />
+      <button type="submit" class="airsense-chat__send" aria-label="Enviar pregunta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <button
+    type="button"
+    class="airsense-chat__toggle"
+    aria-expanded="false"
+    aria-controls="airsenseChat"
+    aria-label="Abrir asistente virtual AirSense"
+    title="Asistente AirSense"
+  >
+    <svg class="airsense-chat__toggle-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <svg class="airsense-chat__toggle-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+</div>
+
+<script src="{% static 'js/chat-agent.js' %}"></script>

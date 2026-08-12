@@ -1,0 +1,1 @@
+web: gunicorn Project.wsgi --log-file - --workers 1 --threads 8 --timeout 60

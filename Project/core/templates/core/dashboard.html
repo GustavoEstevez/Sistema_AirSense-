@@ -1,0 +1,279 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AirSense - Dashboard</title>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var saved = null;
+      try { saved = localStorage.getItem('airsense-theme'); } catch (e) {}
+      var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', theme);
+      function onReady() {
+        var btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          try { localStorage.setItem('airsense-theme', next); } catch (e) {}
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', onReady);
+      } else {
+        onReady();
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var btn = document.getElementById('navToggle');
+      var nav = document.getElementById('siteNav');
+      var header = document.querySelector('header');
+      if (!btn || !nav || !header) return;
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        header.classList.toggle('nav-open', !open);
+      });
+      nav.addEventListener('click', function (e) {
+        if (e.target.closest('a')) {
+          btn.setAttribute('aria-expanded', 'false');
+          header.classList.remove('nav-open');
+        }
+      });
+    })();
+  </script>
+  <link rel="icon" href="{% static 'src/FaviconAirSense.png' %}" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+  <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js" defer></script>
+  <script src="{% static 'core/js/script.js' %}" defer></script>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <a href="{% url 'HomeAI' %}" class="logo">
+      <img src="{% static 'src/Logos/LogoAirSense.png' %}" alt="AirSense" class="logo-img"/>
+      <span class="logo-brand">
+        <span class="logo-text">Air<span>Sense</span></span>
+        <span class="logo-sub">Monitoreo ambiental inteligente.</span>
+      </span>
+    </a>
+    <nav id="siteNav">
+      <a href="{% url 'HomeAI' %}" class="nav-link"><span class="nav-badge">Nuevo</span><span class="nav-badge-text">AirSense AI</span></a>
+      <a href="{% url 'Home' %}" class="nav-link">AirSense Classic</a>
+      <a href="{% url 'dashboard:home' %}" class="nav-link active">Dashboard</a>
+      <a href="{% url 'documentacion' %}" class="nav-link">Documentación</a>
+    </nav>
+    <div class="header-actions">
+      <div class="conn-status" id="connStatus" title="Estado de conexión">
+        <span class="dot"></span>
+        <span class="conn-label">Conectando…</span>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle" role="switch" aria-label="Cambiar a modo oscuro o claro" title="Cambiar tema">
+        <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19"/></svg>
+        <span class="theme-switch-thumb" aria-hidden="true"></span>
+        <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Abrir o cerrar menú">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <main style="padding-top: var(--nav-h);">
+
+    <!-- ── MÉTRICAS EN VIVO ── -->
+    <section id="dashboard" class="section">
+      <div class="container">
+
+        <!-- ── Envío manual de lecturas por correo (arriba del dashboard) ── -->
+        <article class="card email-card email-card--top">
+          <div class="email-head">
+            <div class="email-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div>
+              <h3>Enviar lecturas por correo</h3>
+              <p>Ingresá un email para recibir los parámetros actuales del dashboard.</p>
+            </div>
+          </div>
+          <form class="email-form" id="emailForm" novalidate>
+            <label class="email-label" for="emailInput">Correo electrónico</label>
+            <div class="email-row">
+              <input
+                type="email"
+                id="emailInput"
+                name="email"
+                class="email-input"
+                placeholder="ejemplo@correo.com"
+                autocomplete="email"
+                required
+              />
+              <button type="submit" class="email-btn" id="emailSubmitBtn">Enviar datos</button>
+            </div>
+            <p class="email-feedback" id="emailFeedback" role="status" aria-live="polite"></p>
+          </form>
+          <p class="email-note">
+            Las alertas automáticas se envían cuando el ambiente está en «No Saludable», y se repiten cada 3 minutos mientras persista.
+          </p>
+        </article>
+
+        <div class="section-header">
+          <h2>Dashboard en Vivo</h2>
+          <p>Lecturas en tiempo real de la estación AirSense, actualizadas cada 2 segundos.</p>
+        </div>
+
+        <div class="metrics-grid">
+          <article class="card metric-card" data-metric="temp">
+            <div class="metric-head">
+              <div class="metric-icon icon-temp" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+              </div>
+              <div>
+                <h3 class="metric-label">Temperatura</h3>
+                <p class="metric-sub">Sensor SHT30</p>
+              </div>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value" id="tempValue">--</span>
+              <span class="metric-unit">°C</span>
+              <span class="metric-trend" id="tempTrend"></span>
+            </div>
+            <div class="status-pill" id="tempStatus" data-state="normal">Normal</div>
+          </article>
+
+          <article class="card metric-card" data-metric="hum">
+            <div class="metric-head">
+              <div class="metric-icon icon-hum" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11z"/></svg>
+              </div>
+              <div>
+                <h3 class="metric-label">Humedad</h3>
+                <p class="metric-sub">Sensor SHT30</p>
+              </div>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value" id="humValue">--</span>
+              <span class="metric-unit">%</span>
+              <span class="metric-trend" id="humTrend"></span>
+            </div>
+            <div class="status-pill" id="humStatus" data-state="normal">Óptima</div>
+          </article>
+
+          <article class="card metric-card" data-metric="noise">
+            <div class="metric-head">
+              <div class="metric-icon icon-noise" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              </div>
+              <div>
+                <h3 class="metric-label">Nivel de Ruido</h3>
+                <p class="metric-sub">Micrófono MAX4466</p>
+              </div>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value" id="noiseValue">--</span>
+              <span class="metric-unit">dB</span>
+              <span class="metric-trend" id="noiseTrend"></span>
+            </div>
+            <div class="status-pill" id="noiseStatus" data-state="normal">Ruido Bajo</div>
+          </article>
+
+          <article class="card metric-card" data-metric="co2">
+            <div class="metric-head">
+              <div class="metric-icon icon-co2" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10a3 3 0 1 0-3-3"/><path d="M3 12h14a3 3 0 1 1-3 3"/><path d="M3 16h7a2.5 2.5 0 1 1-2.5 2.5"/></svg>
+              </div>
+              <div>
+                <h3 class="metric-label">Calidad del Aire</h3>
+                <p class="metric-sub">Sensor MQ135</p>
+              </div>
+            </div>
+            <div class="metric-body">
+              <span class="metric-value" id="co2Value">--</span>
+              <span class="metric-unit">ppm</span>
+              <span class="metric-trend" id="co2Trend"></span>
+            </div>
+            <div class="status-pill" id="co2Status" data-state="normal">—</div>
+          </article>
+
+          <article class="card status-card" id="envCard" data-state="healthy">
+            <div class="status-icon" aria-hidden="true">
+              <svg id="envIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h3 class="status-title" id="envTitle">Ambiente Saludable</h3>
+            <p class="status-desc" id="envDesc">Todas las lecturas están dentro de los rangos óptimos.</p>
+            <span class="status-badge" id="envBadge">Saludable</span>
+          </article>
+        </div>
+
+        <article class="card recs-card">
+          <div class="recs-head">
+            <div class="recs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            </div>
+            <div>
+              <h3>Recomendaciones</h3>
+              <p>Sugerencias dinámicas según las últimas lecturas de los sensores.</p>
+            </div>
+          </div>
+          <ul class="recs-list" id="recsList">
+            <li class="rec rec-ok">Esperando la primera lectura de la estación…</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── GRÁFICOS ── -->
+    <section id="charts" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Historial</h2>
+          <p>Tendencias recientes de las variables monitoreadas.</p>
+        </div>
+        <div class="charts-grid">
+          <article class="card chart-card">
+            <h3>Temperatura</h3>
+            <div class="chart-wrap"><canvas id="tempChart"></canvas></div>
+          </article>
+          <article class="card chart-card">
+            <h3>Humedad</h3>
+            <div class="chart-wrap"><canvas id="humChart"></canvas></div>
+          </article>
+          <article class="card chart-card">
+            <h3>Ruido</h3>
+            <div class="chart-wrap"><canvas id="noiseChart"></canvas></div>
+          </article>
+          <article class="card chart-card">
+            <h3>Calidad del Aire</h3>
+            <div class="chart-wrap"><canvas id="co2Chart"></canvas></div>
+          </article>
+        </div>
+        <div class="charts-legend" aria-label="Líneas de referencia">
+          <span class="legend-item">
+            <span class="legend-line legend-line--ok" aria-hidden="true"></span>
+            Rango óptimo (OMS/ASHRAE)
+          </span>
+          <span class="legend-item">
+            <span class="legend-line legend-line--warn" aria-hidden="true"></span>
+            Límite de alerta (CO₂)
+          </span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

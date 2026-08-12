@@ -1,0 +1,1322 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AirSense AI - Monitoreo Ambiental con Inteligencia Artificial</title>
+  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var saved = null;
+      try { saved = localStorage.getItem('airsense-theme'); } catch (e) {}
+      var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      root.setAttribute('data-theme', theme);
+      function onReady() {
+        var btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          try { localStorage.setItem('airsense-theme', next); } catch (e) {}
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', onReady);
+      } else {
+        onReady();
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var btn = document.getElementById('navToggle');
+      var nav = document.getElementById('siteNav');
+      var header = document.querySelector('header');
+      if (!btn || !nav || !header) return;
+      btn.addEventListener('click', function () {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        header.classList.toggle('nav-open', !open);
+      });
+      nav.addEventListener('click', function (e) {
+        if (e.target.closest('a')) {
+          btn.setAttribute('aria-expanded', 'false');
+          header.classList.remove('nav-open');
+        }
+      });
+    })();
+  </script>
+  <link rel="icon" href="{% static 'src/FaviconAirSense.png' %}" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+</head>
+<body class="page-ai">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <a href="{% url 'HomeAI' %}" class="logo">
+      <img src="{% static 'src/Logos/LogoAirSense.png' %}" alt="AirSense" class="logo-img"/>
+      <span class="logo-brand">
+        <span class="logo-text">Air<span>Sense</span></span>
+        <span class="logo-sub">Monitoreo ambiental inteligente.</span>
+      </span>
+    </a>
+    <nav id="siteNav">
+      <a href="{% url 'HomeAI' %}" class="nav-link {% if request.resolver_match.url_name == 'HomeAI' %}active{% endif %}"><span class="nav-badge">Nuevo</span><span class="nav-badge-text">AirSense AI</span></a>
+      <a href="{% url 'Home' %}" class="nav-link {% if request.resolver_match.url_name == 'Home' %}active{% endif %}">AirSense Classic</a>
+      <a href="{% url 'dashboard:home' %}" class="nav-link {% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'documentacion' %}" class="nav-link {% if request.resolver_match.url_name == 'documentacion' %}active{% endif %}">Documentación</a>
+    </nav>
+    <div class="header-actions">
+      <a href="{% url 'dashboard:home' %}" class="btn-live">
+        <span class="live-dot"></span>
+        <span class="btn-live-label">Ver en vivo</span>
+      </a>
+      <button type="button" class="theme-toggle" id="themeToggle" role="switch" aria-label="Cambiar a modo oscuro o claro" title="Cambiar tema">
+        <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19"/></svg>
+        <span class="theme-switch-thumb" aria-hidden="true"></span>
+        <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Abrir o cerrar menú">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── HERO ── -->
+    <section class="home-section hero-section">
+      <div class="home-container hero-inner">
+
+        <div class="hero-text">
+          <span class="section-eyebrow">Nuevo AirSense AI, Monitoreo Ambiental Inteligente con ESP32 + IA</span>
+
+          <h1 class="hero-title ht-type" id="hero-title"
+              data-p1="AirSense evolucionó: "
+              data-p2="ahora "
+              data-p3="piensa con Inteligencia Artificial"
+              aria-label="AirSense evolucionó: ahora piensa con Inteligencia Artificial">
+            <span class="ht-placeholder" aria-hidden="true">AirSense evolucionó: ahora <span>piensa con Inteligencia Artificial</span></span>
+            <span class="typewriter-cursor" aria-hidden="true"></span>
+          </h1>
+
+          <script>
+            (function () {
+              var h1 = document.getElementById('hero-title');
+              if (!h1) return;
+              var p1 = h1.getAttribute('data-p1') || '';
+              var p2 = h1.getAttribute('data-p2') || '';
+              var p3 = h1.getAttribute('data-p3') || '';
+              if (!p1 && !p2 && !p3) { document.documentElement.classList.add('no-type'); return; }
+
+              var main = p1 + p2;
+              var mainLen = main.length;
+              var total = mainLen + p3.length;
+
+              h1.setAttribute('aria-label', (p1 + p2 + p3).replace(/\s+/g, ' ').trim());
+              var placeholder = h1.querySelector('.ht-placeholder');
+              var cursor = h1.querySelector('.typewriter-cursor');
+              var layer = document.createElement('span');
+              layer.className = 'ht-type-layer';
+              layer.setAttribute('aria-hidden', 'true');
+              h1.insertBefore(layer, placeholder);
+              var mainNode = document.createTextNode('');
+              var accent = document.createElement('span');
+              layer.appendChild(mainNode);
+              layer.appendChild(accent);
+              layer.appendChild(cursor);
+
+              var minDelay = 26;
+              var maxDelay = 52;
+              var pauseAfterPart1 = 550;
+              var holdTime = 6000;
+
+              function lengthTyped() {
+                return (mainNode.textContent || '').length + (accent.textContent || '').length;
+              }
+
+              function typeDelay(n) {
+                var segStart = (n < mainLen) ? 0 : mainLen;
+                var segLen = (n < mainLen) ? mainLen : total - mainLen;
+                var pos = segLen ? (n - segStart) / segLen : 0;
+                return minDelay + (maxDelay - minDelay) * pos * pos;
+              }
+
+              function eraseDelay(n) {
+                var p = total ? 1 - n / total : 0;
+                return minDelay + (maxDelay - minDelay) * (1 - p);
+              }
+
+              function typeStep() {
+                var n = lengthTyped();
+                if (n < mainLen) {
+                  mainNode.textContent = main.slice(0, n + 1);
+                } else if (n < total) {
+                  accent.textContent = p3.slice(0, n - mainLen + 1);
+                } else {
+                  cursor.classList.add('typewriter-cursor--fade');
+                  setTimeout(function () {
+                    cursor.classList.remove('typewriter-cursor--fade');
+                    setTimeout(erase, holdTime);
+                  }, 550);
+                  return;
+                }
+                cursor.classList.remove('typewriter-cursor--fade');
+                var delay = (n + 1 === p1.length) ? pauseAfterPart1 : typeDelay(n);
+                setTimeout(typeStep, delay);
+              }
+
+              function erase() {
+                var n = lengthTyped();
+                if (n > mainLen) {
+                  accent.textContent = p3.slice(0, n - mainLen - 1);
+                } else if (n > 0) {
+                  mainNode.textContent = main.slice(0, n - 1);
+                } else {
+                  setTimeout(typeStep, 350);
+                  return;
+                }
+                setTimeout(erase, eraseDelay(n));
+              }
+
+              setTimeout(typeStep, 350);
+            })();
+          </script>
+
+          <p class="hero-desc">
+            La nueva versión de AirSense mide temperatura, humedad, ruido y calidad del aire
+            con mayor precisión, se conecta por WiFi y Bluetooth, y cuenta con un agente de
+            Inteligencia Artificial que interpreta cada medición, arma reportes automáticos
+            y envía alertas por Gmail y WhatsApp.
+          </p>
+
+          <div class="hero-stat-inline">
+            <span class="hero-stat-num">72,7%</span>
+            <span class="hero-stat-text">
+              de las mediciones de ruido del prototipo original estuvieron fuera del rango
+              saludable. AirSense AI transforma estos datos en análisis y recomendaciones inteligentes.
+            </span>
+          </div>
+
+          <div class="hero-actions">
+            <a href="{% url 'dashboard:home' %}" class="btn-cta">
+              <span class="live-dot"></span>
+              Ver Dashboard en vivo
+            </a>
+
+            <a href="#evolucion" class="btn-ghost-home">
+              Descubrir AirSense AI
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-device-card">
+            <img
+              src="{% static 'src/Fotos/HeroAI.png' %}"
+              alt="Dispositivo AirSense actualizado con ESP32 e Inteligencia Artificial"
+              class="hero-device">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── EL PROBLEMA ── -->
+    <section class="home-section problem-section">
+      <div class="home-container">
+        <span class="section-eyebrow">¿Por qué AirSense?</span>
+        <h2 class="section-title">No podemos mejorar<br><span>lo que no medimos</span></h2>
+        <p class="section-desc">Estudiantes y docentes pasan gran parte del día en aulas donde la temperatura, humedad, ruido y calidad del aire pueden afectar el bienestar y el rendimiento académico. Sin embargo, estas condiciones rara vez son monitoreadas de forma continua.</p>
+        <div class="stats-row">
+          <div class="stat-block stat-block--danger">
+            <span class="stat-num">72,7%</span>
+            <span class="stat-label">de las mediciones de ruido estuvieron fuera del rango saludable.</span>
+          </div>
+          <div class="stat-block stat-block--mid">
+            <span class="stat-num">54,5%</span>
+            <span class="stat-label">de las mediciones de temperatura estuvieron por encima del límite recomendado.</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-num">0</span>
+            <span class="stat-label">sistemas de monitoreo ambiental permanentes en la institución antes de AirSense.</span>
+          </div>
+        </div>
+        <blockquote class="home-quote">
+          <span class="q-type" id="problemQuote">
+            <span class="q-type-text">Muchas veces los problemas están frente a nosotros y no los vemos porque no tenemos las herramientas para medirlos.</span><span class="q-type-cursor" aria-hidden="true"></span>
+          </span>
+        </blockquote>
+
+        <script>
+          (function () {
+            var qEl = document.getElementById('problemQuote');
+            if (!qEl) return;
+            var textEl = qEl.querySelector('.q-type-text');
+            if (!textEl) return;
+            var text = textEl.textContent;
+            textEl.textContent = '';
+            var i = 0;
+            var started = false;
+            function type() {
+              i++;
+              textEl.textContent = text.slice(0, i);
+              if (i < text.length) setTimeout(type, 35);
+              else setTimeout(erase, 4500);
+            }
+            function erase() {
+              i--;
+              textEl.textContent = text.slice(0, i);
+              if (i > 0) setTimeout(erase, 20);
+              else setTimeout(type, 500);
+            }
+            function start() {
+              if (started) return;
+              started = true;
+              type();
+            }
+            function inView() {
+              var r = qEl.getBoundingClientRect();
+              return r.top < window.innerHeight && r.bottom > 0;
+            }
+            function maybeStart() {
+              if (!started && inView()) start();
+            }
+            if ('IntersectionObserver' in window) {
+              var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                  if (e.isIntersecting) { start(); io.disconnect(); }
+                });
+              }, { threshold: 0.2 });
+              io.observe(qEl);
+            }
+            window.addEventListener('scroll', maybeStart, { passive: true });
+            window.addEventListener('resize', maybeStart);
+            setTimeout(maybeStart, 600);
+          })();
+        </script>
+      </div>
+    </section>
+
+    <!-- ══ EVOLUCIÓN DE AIRSENSE ══ -->
+    <section class="home-section evolution-section" id="evolucion">
+      <div class="home-container">
+        <span class="section-eyebrow">Evolución de AirSense</span>
+        <h2 class="section-title">De <span class="evo-name evo-name--old">AirSense Classic</span> a <span class="evo-name evo-name--new">AirSense AI</span></h2>
+        <p class="section-desc">
+          Tras la primera etapa de pruebas con el prototipo original, el equipo detectó tres
+          limitaciones concretas —un sensor de ruido difícil de calibrar, la falta de
+          conectividad inalámbrica y la ausencia de medición de calidad del aire— y las
+          resolvió incorporando nuevos componentes y un agente de Inteligencia Artificial al sistema.
+        </p>
+
+        <div class="evo-compare">
+          <div class="evo-card evo-card--old">
+            <span class="evo-tag evo-tag--old">Versión 1 · Prototipo inicial</span>
+            <div class="evo-photo">
+              <img src="{% static 'src/Fotos/AirSenseClassic.png' %}" alt="AirSense Classic">
+            </div>
+            <h3>AirSense Classic</h3>
+            <ul class="evo-list">
+              <li>Arduino UNO</li>
+              <li>Pantalla LCD 16x2</li>
+              <li>Sensor DHT11</li>
+              <li>Sensor KY-038</li>
+              <li>Alimentación por cable USB</li>
+              <li>Sin conectividad inalámbrica</li>
+              <li>Sin medición de calidad del aire (CO2)</li>
+              <li>Prototipo experimental</li>
+            </ul>
+          </div>
+
+          <div class="evo-arrow" aria-hidden="true"></div>
+
+          <div class="evo-card evo-card--new">
+            <span class="evo-tag evo-tag--new">Versión 2 · AirSense actual</span>
+            <div class="evo-photo">
+              <img src="{% static 'src/Fotos/HeroAI.png' %}" alt="AirSense AI">
+            </div>
+            <h3>AirSense AI</h3>
+            <ul class="evo-list">
+              <li>ESP32 con WiFi y Bluetooth</li>
+              <li>Pantalla OLED de alta resolución</li>
+              <li>Sensor SHT30 de mayor precisión</li>
+              <li>Sensor MQ135 para calidad del aire (CO2)</li>
+              <li>Micrófono MAX4466</li>
+              <li>Batería recargable 18650</li>
+              <li>Carcasa diseñada e impresa en 3D</li>
+              <li>Dashboard en tiempo real</li>
+              <li>Agente de Inteligencia Artificial</li>
+              <li>Reportes automáticos</li>
+              <li>Alertas por Gmail y WhatsApp</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="evo-subhead">Principales mejoras</h3>
+        <div class="evo-carousel">
+          <button class="evo-nav evo-nav--prev" id="evoPrev" aria-label="Anterior">‹</button>
+          <div class="evo-viewport">
+            <div class="evo-track" id="evoTrack">
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z"/></svg></span>
+            <span class="evo-feature-text">Mayor precisión en temperatura y humedad</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg></span>
+            <span class="evo-feature-text">Incorporación del monitoreo de calidad del aire (CO2)</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></svg></span>
+            <span class="evo-feature-text">Conectividad WiFi</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="11" x2="23" y2="13"/><line x1="5" y1="10" x2="5" y2="14"/></svg></span>
+            <span class="evo-feature-text">Funcionamiento portátil con batería</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></span>
+            <span class="evo-feature-text">Dashboard en tiempo real</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="5"/><line x1="15" y1="2" x2="15" y2="5"/><line x1="9" y1="19" x2="9" y2="22"/><line x1="15" y1="19" x2="15" y2="22"/><line x1="2" y1="9" x2="5" y2="9"/><line x1="2" y1="15" x2="5" y2="15"/><line x1="19" y1="9" x2="22" y2="9"/><line x1="19" y1="15" x2="22" y2="15"/></svg></span>
+            <span class="evo-feature-text">Inteligencia Artificial que analiza las mediciones</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+            <span class="evo-feature-text">Reportes automáticos por Gmail</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+            <span class="evo-feature-text">Alertas inteligentes por WhatsApp</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+            <span class="evo-feature-text">Nueva interfaz OLED</span>
+          </div>
+          <div class="evo-feature">
+            <span class="evo-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>
+            <span class="evo-feature-text">Carcasa impresa en 3D</span>
+          </div>
+            </div>
+          </div>
+          <button class="evo-nav evo-nav--next" id="evoNext" aria-label="Siguiente">›</button>
+        </div>
+
+        <h3 class="evo-subhead">Comparación de componentes</h3>
+        <div class="spec-table-wrap">
+          <table class="spec-table">
+            <thead>
+              <tr>
+                <th>Componente / Función</th>
+                <th>Versión anterior</th>
+                <th>Versión actualizada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pantalla / interfaz visual</td>
+                <td class="spec-old">LCD 16x2 con módulo I2C (solo texto)</td>
+                <td class="spec-new">OLED 1.3" 128x64 I2C SH1106 (mayor resolución, íconos y más datos)</td>
+              </tr>
+              <tr>
+                <td>Sensor de temperatura y humedad</td>
+                <td class="spec-old">DHT11 (±2°C / ±5% HR, lectura cada 2 s)</td>
+                <td class="spec-new">SHT30 I2C (±0.3°C / ±3% HR, lectura más rápida y estable)</td>
+              </tr>
+              <tr>
+                <td>Detección de ruido / sonido</td>
+                <td class="spec-old">KY-038 (salida analógica, calibración manual poco confiable)</td>
+                <td class="spec-new">Micrófono electret MAX4466 (señal más limpia, ganancia ajustable)</td>
+              </tr>
+              <tr>
+                <td>Calidad del aire</td>
+                <td class="spec-old">No existía esta variable</td>
+                <td class="spec-new">Sensor de gas MQ135 (NH3, NOx, CO2, alcohol, benceno y humo)</td>
+              </tr>
+              <tr>
+                <td>Conectividad y procesamiento</td>
+                <td class="spec-old">Arduino UNO (sin internet, solo cable USB)</td>
+                <td class="spec-new">NodeMCU ESP32 (WiFi + Bluetooth 4.2, IoT y envío remoto)</td>
+              </tr>
+              <tr>
+                <td>Alimentación / autonomía</td>
+                <td class="spec-old">Cable USB fijo, sin batería</td>
+                <td class="spec-new">TP4056 + Step Up Boost con batería 18650 (portátil y recargable)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ INTELIGENCIA ARTIFICIAL ══ -->
+    <section class="home-section ai-section" id="ai">
+      <div class="home-container">
+        <span class="section-eyebrow">Novedad 2026 · Agente Inteligente</span>
+        <h2 class="section-title ht-type" id="ai-title"
+            data-p1="AirSense ahora "
+            data-p2="interpreta lo que mide"
+            aria-label="AirSense ahora interpreta lo que mide">
+          <span class="ht-placeholder" aria-hidden="true">AirSense ahora <span>interpreta lo que mide</span></span>
+          <span class="typewriter-cursor" aria-hidden="true"></span>
+        </h2>
+
+        <script>
+          (function () {
+            var h2 = document.getElementById('ai-title');
+            if (!h2) return;
+            var p1 = h2.getAttribute('data-p1') || '';
+            var p2 = h2.getAttribute('data-p2') || '';
+            if (!p1 && !p2) { document.documentElement.classList.add('no-type'); return; }
+
+            var mainLen = p1.length;
+            var total = mainLen + p2.length;
+
+            h2.setAttribute('aria-label', (p1 + p2).replace(/\s+/g, ' ').trim());
+            var placeholder = h2.querySelector('.ht-placeholder');
+            var cursor = h2.querySelector('.typewriter-cursor');
+            var layer = document.createElement('span');
+            layer.className = 'ht-type-layer';
+            layer.setAttribute('aria-hidden', 'true');
+            h2.insertBefore(layer, placeholder);
+            var mainNode = document.createTextNode('');
+            var accent = document.createElement('span');
+            layer.appendChild(mainNode);
+            layer.appendChild(accent);
+            layer.appendChild(cursor);
+
+            var minDelay = 26;
+            var maxDelay = 52;
+            var holdTime = 6000;
+
+            function lengthTyped() {
+              return (mainNode.textContent || '').length + (accent.textContent || '').length;
+            }
+
+            function typeDelay(n) {
+              var segLen = (n < mainLen) ? mainLen : total - mainLen;
+              var segStart = (n < mainLen) ? 0 : mainLen;
+              var pos = segLen ? (n - segStart) / segLen : 0;
+              return minDelay + (maxDelay - minDelay) * pos * pos;
+            }
+
+            function eraseDelay(n) {
+              var p = total ? 1 - n / total : 0;
+              return minDelay + (maxDelay - minDelay) * (1 - p);
+            }
+
+            function typeStep() {
+              var n = lengthTyped();
+              if (n < mainLen) {
+                mainNode.textContent = p1.slice(0, n + 1);
+              } else if (n < total) {
+                accent.textContent = p2.slice(0, n - mainLen + 1);
+              } else {
+                cursor.classList.add('typewriter-cursor--fade');
+                setTimeout(function () {
+                  cursor.classList.remove('typewriter-cursor--fade');
+                  setTimeout(erase, holdTime);
+                }, 550);
+                return;
+              }
+              cursor.classList.remove('typewriter-cursor--fade');
+              setTimeout(typeStep, typeDelay(n));
+            }
+
+            function erase() {
+              var n = lengthTyped();
+              if (n > mainLen) {
+                accent.textContent = p2.slice(0, n - mainLen - 1);
+              } else if (n > 0) {
+                mainNode.textContent = p1.slice(0, n - 1);
+              } else {
+                setTimeout(typeStep, 350);
+                return;
+              }
+              setTimeout(erase, eraseDelay(n));
+            }
+
+            setTimeout(typeStep, 400);
+          })();
+        </script>
+
+        <p class="section-desc">
+          Más allá de sensar, la nueva versión incorpora un agente de Inteligencia Artificial
+          que analiza en tiempo real las variables ambientales, redacta reportes automáticos
+          y avisa apenas detecta una condición fuera de los valores saludables, sin necesidad
+          de que alguien esté mirando el dashboard.
+        </p>
+
+        <div class="ai-grid">
+          <div class="ai-card">
+            <span class="ai-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8.5" width="17" height="11" rx="2.5"/><circle cx="9" cy="13.5" r="1.4"/><circle cx="15" cy="13.5" r="1.4"/><path d="M9.5 17.5h5"/><path d="M12 8.5V5"/><circle cx="12" cy="3.6" r="1.2"/></svg></span>
+            <h3>Agente de Inteligencia Artificial</h3>
+            <p>Analiza continuamente temperatura, humedad, ruido y calidad del aire, comparándolas con los valores de referencia investigados (OMS, ASHRAE, Resolución 295/03 SRT) para determinar si el ambiente es saludable.</p>
+          </div>
+          <div class="ai-card">
+            <span class="ai-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M7.76 7.76a6 6 0 0 0 0 8.48"/><path d="M16.24 7.76a6 6 0 0 1 0 8.48"/><path d="M4.9 4.9a10 10 0 0 0 0 14.2"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2"/></svg></span>
+            <h3>Dashboard en tiempo real</h3>
+            <p>Recibe los datos del ESP32 por WiFi y los muestra en vivo, sin depender de un cable serial ni de una computadora conectada todo el tiempo.</p>
+          </div>
+          <div class="ai-card">
+            <span class="ai-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+            <h3>Reportes automáticos por Gmail</h3>
+            <p>El sistema arma y envía informes periódicos con el estado del ambiente monitoreado directamente a la casilla de correo configurada.</p>
+          </div>
+          <div class="ai-card">
+            <span class="ai-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+            <h3>Alertas inteligentes por WhatsApp</h3>
+            <p>Ante una condición fuera de rango, la IA dispara una alerta instantánea por WhatsApp para poder actuar a tiempo.</p>
+          </div>
+        </div>
+
+        <p class="ai-footnote">
+          Estas funciones se apoyan en la conectividad WiFi y Bluetooth del ESP32, que
+          reemplazó al Arduino UNO como unidad central y permitió pensar el dashboard como
+          una aplicación conectada, ya no como un simple gráfico alimentado por cable serial.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ ENCUESTA DE USABILIDAD ══ -->
+    <section class="home-section survey-section" id="encuesta">
+      <div class="home-container">
+        <span class="section-eyebrow">Encuesta de Usabilidad · <span id="survey-count">28</span> respuestas</span>
+        <h2 class="section-title">¿Qué dijo la comunidad<br><span>sobre AirSense AI?</span></h2>
+        <p class="section-desc">
+          Encuestamos a la comunidad para evaluar <strong>AirSense AI y las mejoras incorporadas en su nueva versión</strong>:
+          nuevo hardware, mayor conectividad, Inteligencia Artificial, AirScore y nuevas funcionalidades.
+          Los resultados se actualizan en vivo desde nuestro formulario de Google.
+        </p>
+
+        <div class="survey-stats" id="survey-stats">
+          <!-- Generado por JS -->
+        </div>
+
+        <div class="survey-charts">
+          <div class="survey-chart-card">
+            <h3>Impresión general</h3>
+            <div class="chart-wrap"><canvas id="chartImpresion"></canvas></div>
+          </div>
+          <div class="survey-chart-card">
+            <h3>¿Dónde sería más útil?</h3>
+            <div class="chart-wrap"><canvas id="chartLugares"></canvas></div>
+          </div>
+          <div class="survey-chart-card">
+            <h3>¿Lo usarías?</h3>
+            <div class="chart-wrap"><canvas id="chartUsaria"></canvas></div>
+          </div>
+          <div class="survey-chart-card">
+            <h3>Necesidad de resolverlo (1 a 5)</h3>
+            <div class="chart-wrap"><canvas id="chartNecesidad"></canvas></div>
+          </div>
+        </div>
+
+        <div class="survey-likert" id="survey-likert">
+          <!-- Generado por JS -->
+        </div>
+
+        <h3 class="evo-subhead">Lo que dice la comunidad</h3>
+        <div class="quote-carousel">
+          <button class="quote-nav quote-nav--prev" id="quotePrev" aria-label="Anterior">‹</button>
+          <div class="quote-viewport">
+            <div class="quote-track" id="quoteTrack">
+              <!-- Generado por JS -->
+            </div>
+          </div>
+          <button class="quote-nav quote-nav--next" id="quoteNext" aria-label="Siguiente">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HARDWARE ── -->
+    <section class="home-section hardware-section">
+      <div class="home-container">
+        <span class="section-eyebrow">Open Hardware · Versión actualizada</span>
+        <h2 class="section-title">Componentes del sistema</h2>
+
+        <div class="hw-grid">
+
+          <div class="hw-card hw-card-featured">
+            <img
+              src="{% static 'src/Fotos/HeroAI.png' %}"
+              alt="Dispositivo AirSense AI"
+              class="hw-img hw-img-featured"
+            >
+            <div class="hw-tag">AirSense AI</div>
+            <h3>Dispositivo Completo</h3>
+            <p>
+              Sistema de monitoreo ambiental con Inteligencia Artificial integrada. Mide
+              temperatura, humedad, ruido y calidad del aire en tiempo real, transmite por
+              WiFi y genera reportes y alertas automáticas.
+            </p>
+          </div>
+
+          <!-- ESP32 -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/ESP32.png' %}"
+              alt="NodeMCU ESP32"
+              class="hw-img"
+            >
+            <div class="hw-tag">ESP32 WROOM</div>
+            <h3>Microcontrolador WiFi + Bluetooth</h3>
+            <p>
+              Reemplaza al Arduino UNO. Procesa las lecturas, corre el agente de IA y
+              transmite los datos por WiFi hacia el dashboard.
+            </p>
+          </div>
+
+          <!-- OLED -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/OLED.png' %}"
+              alt="Pantalla OLED SH1106"
+              class="hw-img"
+            >
+            <div class="hw-tag">OLED 1.3" SH1106</div>
+            <h3>Pantalla de Alta Resolución</h3>
+            <p>
+              128x64 píxeles vía I2C. Muestra las cuatro variables en simultáneo, con mejor
+              legibilidad que la LCD 16x2 original.
+            </p>
+          </div>
+
+          <!-- SHT30 -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/SHT30.png' %}"
+              alt="Sensor SHT30"
+              class="hw-img"
+            >
+            <div class="hw-tag">SHT30 I2C</div>
+            <h3>Temperatura y Humedad</h3>
+            <p>
+              Precisión ±0.3°C y ±3% HR. Reemplaza al DHT11 con lecturas más rápidas y estables.
+            </p>
+          </div>
+
+          <!-- MQ135 -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/MQ135.png' %}"
+              alt="Sensor de gas MQ135"
+              class="hw-img"
+            >
+            <div class="hw-tag">MQ135</div>
+            <h3>Calidad del Aire</h3>
+            <p>
+              Mide NH3, NOx, CO2, alcohol, benceno y humo. La variable que el prototipo
+              original no contemplaba.
+            </p>
+          </div>
+
+          <!-- MAX4466 -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/MAX4466.png' %}"
+              alt="Micrófono MAX4466"
+              class="hw-img"
+            >
+            <div class="hw-tag">MAX4466</div>
+            <h3>Micrófono de Ruido</h3>
+            <p>
+              Amplificador electret con ganancia ajustable. Reemplaza al KY-038 con una
+              señal más limpia y confiable.
+            </p>
+          </div>
+
+          <!-- Batería -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/TP4056.png' %}"
+              alt="Batería 18650 con módulo TP4056"
+              class="hw-img"
+            >
+            <div class="hw-tag">TP4056 + 18650</div>
+            <h3>Autonomía Portátil</h3>
+            <p>
+              Módulo de carga con batería recargable 18650. AirSense ya no depende de estar enchufado.
+            </p>
+          </div>
+
+          <!-- Carcasa -->
+          <div class="hw-card">
+            <img
+              src="{% static 'src/Fotos/Carcasa3D.png' %}"
+              alt="Carcasa impresa en 3D"
+              class="hw-img"
+            >
+            <div class="hw-tag">Impresión 3D</div>
+            <h3>Carcasa Propia</h3>
+            <p>
+              Diseñada por el equipo, con ventana para la pantalla OLED y orificios para el
+              micrófono y el sensor de gas.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ SOBRE EL PROYECTO ══ -->
+    <section class="home-section about-section">
+      <div class="home-container about-inner">
+        <div class="about-text">
+          <span class="section-eyebrow">Sobre el proyecto</span>
+          <h2 class="section-title">Ingeniería y Tecnología<br><span>en acción</span></h2>
+          <p>AirSense es un proyecto de la categoría <strong>Ingeniería y Tecnología — Categoría B</strong> (trabajos institucionales) presentado en la Feria de Educación, Arte, Ciencias y Tecnología (ACTE) 2026 de la Provincia de Buenos Aires.</p>
+          <p>El proyecto surge de una pregunta investigable: ¿las condiciones ambientales de los espacios de nuestra escuela son saludables? Para responderla, el equipo desarrolló un sistema de monitoreo completo que combina hardware ESP32 con una plataforma web de visualización en tiempo real y un agente de Inteligencia Artificial.</p>
+          <p>La Carpeta de Campo registra todo el proceso de investigación, desde las hipótesis iniciales hasta la actualización del prototipo y la incorporación de IA, siguiendo los lineamientos curriculares de la DGCyE Buenos Aires.</p>
+        </div>
+        <div class="about-data">
+          <div class="about-data-card">
+            <div class="about-data-row">
+              <span class="adr-label">Institución</span>
+              <span class="adr-value">E.E.S.T N°1</span>
+            </div>
+            <div class="about-data-row">
+              <span class="adr-label">Curso</span>
+              <span class="adr-value">7°1</span>
+            </div>
+            <div class="about-data-row">
+              <span class="adr-label">Área</span>
+              <span class="adr-value">Ingeniería y Tecnología B</span>
+            </div>
+            <div class="about-data-row">
+              <span class="adr-label">Instancia</span>
+              <span class="adr-value">Feria ACTE 2026</span>
+            </div>
+            <div class="about-data-row">
+              <span class="adr-label">Docentes asesores</span>
+              <span class="adr-value">Gareis Pablo, Lautaro Aragon, Marcos Correia.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EQUIPO ── -->
+    <section class="home-section team-section">
+      <div class="home-container">
+        <span class="section-eyebrow">Feria ACTE 2026 · E.E.S.T N°1 · 7°1</span>
+        <h2 class="section-title">El equipo de AirSense</h2>
+        <p class="section-desc">Estudiantes de la Escuela de Educación Secundaria Técnica N°1</p>
+        <div class="team-grid">
+          <div class="team-card">
+          <div class="team-avatar">
+        <img src="{% static 'src/Fotos/Martin.jpeg' %}" alt=">Martín Clemente">
+            </div>
+            <div class="team-name">Martín Clemente</div>
+            <div class="team-role">Desarrollo Web</div>
+          </div>
+          <div class="team-card">
+          <div class="team-avatar">
+        <img src="{% static 'src/Fotos/Gusti.png' %}" alt="Gustavo Estévez">
+            </div>
+            <div class="team-name">Gustavo Estévez</div>
+            <div class="team-role">Diseño del Dispositivo</div>
+          </div>
+          <div class="team-card">
+                      <div class="team-avatar">
+        <img src="{% static 'src/Fotos/Benja.jpeg' %}" alt="Benjamín Novel">
+            </div>
+            <div class="team-name">Benjamín Novel</div>
+            <div class="team-role">Documentación Técnica</div>
+          </div>
+          <div class="team-card">
+                      <div class="team-avatar">
+        <img src="{% static 'src/Fotos/Nico.jpg' %}" alt="Nicolás Gutiérrez">
+            </div>
+            <div class="team-name">Nicolás Gutiérrez</div>
+            <div class="team-role">Presentación del Stand</div>
+          </div>
+        </div>
+        <p class="team-tutor">Docentes orientadores: <strong>Gareis Pablo, Lautaro Aragon, Marcos Correia.</strong></p>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="home-footer">
+      <div class="home-container footer-inner">
+        <div class="footer-brand">
+          <a href="{% url 'HomeAI' %}" class="logo">
+            <img src="{% static 'src/Logos/LogoAirSense.png' %}" alt="AirSense" class="logo-img" style="height:48px;"/>
+            <span class="logo-text">Air<span>Sense</span></span>
+          </a>
+          <p>Monitoreo ambiental inteligente.<br>Proyecto de Feria ACTE 2026 · E.E.S.T. N°1</p>
+        </div>
+        <div class="footer-links">
+          <a href="{% url 'HomeAI' %}" class="footer-link-ai"><span class="nav-badge">Nuevo</span><span class="nav-badge-text">AirSense AI</span></a>
+          <a href="{% url 'Home' %}">AirSense Classic</a>
+          <a href="{% url 'dashboard:home' %}">Dashboard</a>
+          <a href="{% url 'documentacion' %}">Documentación</a>
+        </div>
+        <div class="footer-meta">
+          <p>Área: Informática · Nivel Superior Secundario Técnico</p>
+          <p>© 2026 AirSense · Todos los derechos reservados</p>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ── ENCUESTA: PapaParse + Chart.js ── -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script>
+    // ══════════════════════════════════════════════════════════════
+    // ENCUESTA DE USABILIDAD — AirSense
+    // Fuente en vivo: Hoja de respuestas de Google Forms publicada
+    // como CSV (Archivo → Compartir → Publicar en la Web → CSV).
+    // Si el link no está disponible, se usan los datos de respaldo
+    // (última exportación) para que la sección nunca quede vacía.
+    // ══════════════════════════════════════════════════════════════
+    const SURVEY_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSs2lTTyK7kXEyvWS-8RjUBVxc-gtc9akUIaHGxRA_vFh1YUDkBLtsO6-A0Pdd_OVhSczUqecbFNVEo/pub?gid=1449413424&single=true&output=csv";
+
+    const SURVEY_FALLBACK_CSV = `"Marca temporal","  1. ¿Cuál fue tu impresión general sobre AirSense?","  2. ¿Te parece que AirSense es un sistema práctico para utilizar en la vida cotidiana?","  3. Luego de comparar el prototipo anterior con el nuevo, ¿considerás que las mejoras implementadas son útiles?  ","  4. ¿Qué tan fácil te resultó comprender el funcionamiento de AirSense?  ","  5. ¿En qué medida considerás que AirSense puede ser útil para mejorar el monitoreo de las condiciones ambientales?  ","  6. ¿En qué lugares creés que AirSense sería más útil? (Podés seleccionar más de una opción.)","  7. Del 1 al 5, ¿qué tan necesario es resolver este problema en tu comunidad?","  8. ¿Utilizarías AirSense si estuviera disponible para su uso?  ","  9. Con tus propias palabras, ¿cómo le explicarías esta propuesta a otra persona?","  10. ¿Qué aspecto de AirSense fue el que más te gustó?  ","  11. ¿Qué crees que podría fallar o por qué una idea así podría no funcionar en la realidad?","  12. Si pudieras cambiarle o agregarle una sola cosa a esta propuesta antes de llevarla a la práctica, ¿qué sería?","  13. ¿Tenés algún comentario o sugerencia adicional para ayudarnos a mejorar AirSense?  "
+"2026/08/06 11:05:40 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos;Otros","","Sí","","Integracion del agente IA","","Mejorar la integracion con IA",""
+"2026/08/06 11:09:08 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos","","Sí","","Que es un proyecto hecho con mucho cariño y dedicación ","","",""
+"2026/08/07 12:40:34 a.m. GMT-3","Buena","Práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos;Otros","5","Sí","Una propuesta con una visión de controlar y mejorar las condiciones ambientales en el futuro","Me gusto el uso de la tecnología para detectar problemas ambientales en nuestra vida diaria","-","Más opciones de accesibilidad","Panel solar para usar energías renovables"
+"2026/08/07 3:02:43 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Neutral","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos","5","Sí","Diría que es un sistema que ayuda a medir la temperatura con precisión ","Las mediciones ","Quizás la manera de obtenerlo ","Nada ","Nada "
+"2026/08/07 3:05:24 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas","5","Sí","","Que pueda mandar alertas al WhatsApp ","Tal vez porque ya hay apps que miden la temperatura y la humedad ","Una pantalla mas grande para la gente que tenga problemas de la vista ",""
+"2026/08/07 3:13:11 p.m. GMT-3","Excelente","Práctico","Muy útiles","Muy fácil","Útil","Hospitales;Industrias;Espacios públicos","3","Tal vez","","","","Cambiaría la batería recargable por unos paneles solares, para que sea más natural y cuidar el medio ambiente ",""
+"2026/08/07 3:17:14 p.m. GMT-3","Excelente","Práctico","Muy útiles","Fácil","Útil","Hospitales;Industrias;Espacios públicos","3","Tal vez","","Lo que más me gustó fue que te da un aviso en caso de cualquier alerta ","Por el requerimiento de materiales costosos ","",""
+"2026/08/07 3:32:05 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas","3","Sí","Es muy buena propuesta","Todos","No tengo idea","Nada","Todo muy bueno"
+"2026/08/07 4:22:49 p.m. GMT-3","Buena","Práctico","Útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos;Otros","5","Sí","Un sensor de contaminación ambiental con reportes virtuales","Sensor de c02","Costos del producto","Ninguna ","No"
+"2026/08/07 5:36:32 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales","5","Sí","AirSense es una propuesta que busca mejorar la calidad del aire y ayudar a las personas a saber cómo está el ambiente que las rodea. La idea es que sea un sistema práctico y fácil de usar, que pueda aplicarse en lugares como hogares, escuelas, oficinas, hospitales y espacios públicos.","Lo que más me gustó de AirSense es que es una propuesta práctica e innovadora que busca mejorar la calidad del aire y cuidar la salud de las personas.","Creo que podría fallar si los sensores no son precisos, si el sistema resulta complicado de usar o si tiene un costo muy alto para instalarlo y mantenerlo. También podría ser difícil que las personas se acostumbren a utilizarlo en su vida cotidiana.","Le agregaría una aplicación o pantalla donde se pueda ver de forma clara y sencilla la calidad del aire en tiempo real, junto con alertas cuando los niveles sean peligrosos.","Me parece una propuesta interesante y útil. Como sugerencia, trataría de que sea fácil de usar y accesible para que pueda implementarse en distintos lugares y que más personas puedan aprovecharla."
+"2026/08/07 6:29:00 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Otros","1","Sí","","","","",""
+"2026/08/07 6:39:56 p.m. GMT-3","Buena","Práctico","Neutral","Muy fácil","Muy útil","Hogares;Hospitales;Industrias","4","Sí","Un dispositivo recargable que ayuda ver lo saludable que es el ambiente","El resguardo de la informacion de manera online","La saturacion del servidor por muchas conexiones simultaneamente","No se me ocurre nd","Implementacion de websockets en vez de peticiones al servidor cada 2 sg"
+"2026/08/07 6:57:32 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Hospitales;Espacios públicos","5","Sí","Es un sistema que analiza las condiciones del aire ambiental","Su eficacia de medir todos los patrones","Creo que podria funcionar y ser muy util","Nada","No me parece perfecto"
+"2026/08/07 7:02:36 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos","5","Sí","Es un dispositivo q chequea valores d humedad temperatura, nivel d co2 y nivel sonoro, enviandote alertas por wsp o mail","Nivel d co2 y contaminacion sonora","","",""
+"2026/08/07 7:04:44 p.m. GMT-3","Excelente","Práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Oficinas;Hospitales;Industrias","4","Sí","","","","","No"
+"2026/08/07 7:52:37 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas","5","Sí","útil y muy completo","alerta x Wassap","podría fallar si no hay buena señal","que no sea muy costoso  ","nada"
+"2026/08/07 8:38:44 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hospitales","4","Tal vez","","","","",""
+"2026/08/07 8:41:25 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas","1","Sí","","","","",""
+"2026/08/07 8:45:26 p.m. GMT-3","Excelente","Práctico","Muy útiles","Fácil","Útil","Hogares","4","Sí","Herramienta de medición para mejorar condiciones de vida","Compromiso joven y ambiental","Todo se puede. A base de prueba y error","No comprendo algunas partes del funcionamiento. Pero si mide el dióxido de carbono que mida por ejemplo en invierno cuando la gente tiene la calefacción prendida y mueren por inhalación ","Lo anteriormente expuesto "
+"2026/08/07 8:50:13 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Hospitales","5","Sí","","","","",""
+"2026/08/07 9:15:40 p.m. GMT-3","Excelente","Práctico","Útiles","Fácil","Útil","Escuelas;Hogares;Oficinas","4","Sí","Que se dirija a hablar con los creadores.","El agente de inteligencia artificial.","Con inteligencia artificial bien creada es imposible que haya fallad.","No sabe, no responde.","Ninguno."
+"2026/08/07 9:37:08 p.m. GMT-3","Excelente","Práctico","Muy útiles","Fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias","5","Sí","Es un aparato que es necesario para el hogar,escuelas y otros lugares,ya que tienes varias funciones en un solo dispositivo.","Que mida el dioxido de carbono","Lo veo muy completo,si algo puede fallar quisas sea en la durabilidad de la bateria","Que envié alertas a celulares de integrantes del hogar o donde sea que se utilice.","Ponerle ""alarma ""en caso de monoxido en el hogar."
+"2026/08/07 9:51:21 p.m. GMT-3","Buena","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Hospitales","5","Sí","Te proponemos probar un dispositivo que mide variaciones en el ambiente, como ser la temperatura, los niveles de ruidos y los componentes del aire, logrando un monitoreo continuo con aviso de alertas enviadas por Whatsapp o mail.","Que mida alteraciones en el aire detectando Co. .","Creo que puede funcionar, no encuentro fallas ","Que si detecta una alteración que ponga en riesgo la vida, tenga localizador y envié alerta al 911.","Ninguno se vemuy bien"
+"2026/08/07 10:25:41 p.m. GMT-3","Excelente","Práctico","Muy útiles","Fácil","Muy útil","Escuelas;Hospitales;Espacios públicos","5","Sí","Se nesecita aportar todos los desarrollos que existan para conseguir solucionar los graves inconvenientes ambientales ","Lo simple del desarrollo","El uso total de la ia la cual en ocasiones puede cometer errores","El doble control de los resultados ","La participación del der humano en los resultados finales "
+"2026/08/07 10:47:02 p.m. GMT-3","Excelente","Muy práctico","Muy útiles","Muy fácil","Muy útil","Escuelas;Hogares;Oficinas;Hospitales;Industrias;Espacios públicos","5","Sí","Es un excelente programa para la salud ambiental ","Todos es muy bueno lo que ser proponen realizzar","Fallaría si no la ponen en práctica porque es una gran propuesta ","No le cambiaría nada excelente propuesta ","Que se animen será un gran progreso"
+"2026/08/07 10:58:34 p.m. GMT-3","Excelente","Práctico","Muy útiles","Fácil","Muy útil","Escuelas;Hogares;Hospitales","4","Sí","","","","",""
+"2026/08/08 12:52:22 a.m. GMT-3","Excelente","Muy práctico","Muy útiles","Fácil","Muy útil","Industrias;Espacios públicos","5","Sí","","la claridad y facilidad de uso","la demanda que haya sobre el proyecto ","",""
+"2026/08/08 1:22:27 a.m. GMT-3","Excelente","Muy práctico","Muy útiles","Fácil","Útil","Escuelas;Hospitales;Espacios públicos","5","Sí","Es una herramienta muy útil para combatir la contaminación del medio ambiente ","Sus actualizaciones permanentes y poder de detecvin de los fistintos tipos de contaminacion","Demasiado uso de ia la cual puede fallar en sus diagnósticos precidos","Que tuviese mas supervisando humana en sus diagnóstico final","Solo seguir perfeccionando los sistemas dado que son y serán extremadamente útiles para las generaciones futuras"`;
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    async function loadSurveyData() {
+      let text;
+      try {
+        const res = await fetch(SURVEY_CSV_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("Respuesta no OK: " + res.status);
+        text = await res.text();
+        if (!text || text.trim().length < 20) throw new Error("CSV vacío");
+      } catch (err) {
+        console.warn("No se pudo obtener la encuesta en vivo, usando datos de respaldo.", err);
+        text = SURVEY_FALLBACK_CSV;
+      }
+      const parsed = Papa.parse(text.trim(), { skipEmptyLines: true });
+      const rows = parsed.data.slice(1); // quitar fila de encabezados
+      renderSurvey(rows);
+    }
+
+    function renderSurvey(rows) {
+      const total = rows.length;
+      const countEl = document.getElementById("survey-count");
+      if (countEl) countEl.textContent = total;
+
+      const col = (i) => rows.map((r) => (r[i] || "").trim()).filter(Boolean);
+
+      const countSingle = (i) => {
+        const c = {};
+        col(i).forEach((v) => { c[v] = (c[v] || 0) + 1; });
+        return c;
+      };
+      const countMulti = (i) => {
+        const c = {};
+        col(i).forEach((v) => v.split(";").forEach((x) => {
+          x = x.trim();
+          if (x) c[x] = (c[x] || 0) + 1;
+        }));
+        return c;
+      };
+      const pct = (count, base) => (base ? Math.round((count / base) * 100) : 0);
+
+      const q1 = countSingle(1);  // impresión general
+      const q2 = countSingle(2);  // practicidad
+      const q3 = countSingle(3);  // mejoras útiles
+      const q4 = countSingle(4);  // facilidad de comprensión
+      const q5 = countSingle(5);  // utilidad para monitoreo
+      const q6 = countMulti(6);   // lugares (multi-select)
+      const q7 = countSingle(7);  // necesidad 1-5
+      const q8 = countSingle(8);  // usaría
+
+      /* ── Estadísticas destacadas ── */
+      const positivos1 = (q1["Excelente"] || 0) + (q1["Buena"] || 0);
+      const usariaSi = q8["Sí"] || 0;
+      const usariaTalVez = q8["Tal vez"] || 0;
+      const facilFacil = (q4["Muy fácil"] || 0) + (q4["Fácil"] || 0);
+      const n7 = col(7).length;
+      const necesidadAlta = (q7["5"] || 0) + (q7["4"] || 0);
+
+      const stats = [
+        { num: pct(positivos1, total) + "%", label: "calificó la experiencia como Buena o Excelente" },
+        { num: pct(usariaSi + usariaTalVez, total) + "%", label: "usaría o consideraría usar AirSense" },
+        { num: pct(facilFacil, total) + "%", label: "entendió fácil o muy fácil el funcionamiento" },
+        { num: (n7 ? pct(necesidadAlta, n7) : 0) + "%", label: "calificó con 4 o 5 la necesidad de resolver este problema" },
+      ];
+      const statsEl = document.getElementById("survey-stats");
+      if (statsEl) {
+        statsEl.innerHTML = stats.map((s) => `
+          <div class="survey-stat">
+            <span class="survey-stat-num">${s.num}</span>
+            <span class="survey-stat-label">${s.label}</span>
+          </div>`).join("");
+      }
+
+      /* ── Gráficos ── */
+      const palette = ["#088395", "#7AB2B2", "#F59E0B", "#EF4444", "#0A4C60", "#6EEAD4"];
+      const chartFont = { family: "'DM Sans', sans-serif", size: 11 };
+      const charts = [];
+
+      try {
+
+      const impresionCtx = document.getElementById("chartImpresion");
+      if (impresionCtx) {
+        const chart = new Chart(impresionCtx, {
+          type: "doughnut",
+          data: {
+            labels: Object.keys(q1),
+            datasets: [{ data: Object.keys(q1).map(() => 0), backgroundColor: palette, borderWidth: 0 }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 0 },
+            plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: chartFont } } },
+          },
+        });
+        chart.__real = Object.values(q1);
+        charts.push(chart);
+      }
+
+      const lugaresSorted = Object.entries(q6).sort((a, b) => b[1] - a[1]);
+      const lugaresCtx = document.getElementById("chartLugares");
+      if (lugaresCtx) {
+        const chart = new Chart(lugaresCtx, {
+          type: "bar",
+          data: {
+            labels: lugaresSorted.map((x) => x[0]),
+            datasets: [{ data: lugaresSorted.map(() => 0), backgroundColor: "#088395", borderRadius: 6 }],
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 0 },
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { stepSize: 1, font: chartFont } },
+              y: { ticks: { font: chartFont } },
+            },
+          },
+        });
+        chart.__real = lugaresSorted.map((x) => x[1]);
+        charts.push(chart);
+      }
+
+      const usariaCtx = document.getElementById("chartUsaria");
+      if (usariaCtx) {
+        const chart = new Chart(usariaCtx, {
+          type: "doughnut",
+          data: {
+            labels: Object.keys(q8),
+            datasets: [{ data: Object.keys(q8).map(() => 0), backgroundColor: palette, borderWidth: 0 }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 0 },
+            plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: chartFont } } },
+          },
+        });
+        chart.__real = Object.values(q8);
+        charts.push(chart);
+      }
+
+      const necesidadLabels = ["1", "2", "3", "4", "5"];
+      const necesidadCtx = document.getElementById("chartNecesidad");
+      if (necesidadCtx) {
+        const chart = new Chart(necesidadCtx, {
+          type: "bar",
+          data: {
+            labels: necesidadLabels,
+            datasets: [{ data: necesidadLabels.map(() => 0), backgroundColor: "#0A4C60", borderRadius: 6 }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 0 },
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { ticks: { stepSize: 1, font: chartFont } },
+              x: { ticks: { font: chartFont } },
+            },
+          },
+        });
+        chart.__real = necesidadLabels.map((l) => q7[l] || 0);
+        charts.push(chart);
+      }
+      } catch (err) {
+        console.warn("No se pudieron crear los gráficos de la encuesta.", err);
+      }
+
+      /* ── Barras tipo "Resultados" para las preguntas de escala ── */
+      const likert = [
+        { name: "Practicidad", top: "Muy práctico", count: q2["Muy práctico"] || 0 },
+        { name: "Mejoras vs. versión anterior", top: "Muy útiles", count: q3["Muy útiles"] || 0 },
+        { name: "Facilidad de comprensión", top: "Muy fácil", count: q4["Muy fácil"] || 0 },
+        { name: "Utilidad para el monitoreo", top: "Muy útil", count: q5["Muy útil"] || 0 },
+      ];
+      const likertEl = document.getElementById("survey-likert");
+      if (likertEl) {
+        likertEl.innerHTML = likert.map((l) => {
+          const p = pct(l.count, total);
+          return `
+            <div class="param-bar">
+              <div class="param-name">${l.name}</div>
+              <div class="param-track"><div class="param-fill param-fill--ok" style="width:0" data-w="${p}"></div></div>
+              <div class="param-pct">${p}% respondió "${l.top}"</div>
+            </div>`;
+        }).join("");
+      }
+
+      /* ── Animar gráficos y barras al entrar en pantalla ── */
+      const surveySection = document.getElementById("encuesta");
+      const revealSurvey = () => {
+        if (surveySection && surveySection.classList.contains("in-view")) return;
+        try {
+          charts.forEach((chart) => {
+            chart.options.animation = { duration: 1100, easing: "easeOutQuart" };
+            chart.data.datasets.forEach((ds) => {
+              ds.data = (chart.__real || []).slice();
+            });
+            chart.update();
+          });
+        } catch (e) {
+          console.warn("Error al animar los gráficos de la encuesta.", e);
+        }
+        document.querySelectorAll(".param-fill[data-w]").forEach((el) => {
+          el.style.width = el.getAttribute("data-w") + "%";
+        });
+        if (surveySection) surveySection.classList.add("in-view");
+      };
+      if (surveySection && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              revealSurvey();
+              io.disconnect();
+            }
+          });
+        }, { threshold: 0.2 });
+        io.observe(surveySection);
+        window.setTimeout(() => {
+          const r = surveySection.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) {
+            revealSurvey();
+          }
+        }, 2500);
+      } else {
+        revealSurvey();
+      }
+
+      /* ── Comentarios destacados ── */
+      const blacklist = new Set(["no", "nada", "ninguno", "ninguna", "no.", "no sabe, no responde.", "-", "n/a", "todo muy bueno"]);
+      const commentCols = [
+        { i: 9, label: "Cómo lo explicarían" },
+        { i: 10, label: "Lo que más les gustó" },
+        { i: 12, label: "Qué le agregarían" },
+        { i: 13, label: "Comentario adicional" },
+      ];
+      let quotes = [];
+      commentCols.forEach((c) => {
+        col(c.i).forEach((text) => {
+          const clean = text.trim();
+          if (clean.length >= 12 && !blacklist.has(clean.toLowerCase())) {
+            quotes.push({ text: clean, label: c.label });
+          }
+        });
+      });
+      quotes = quotes.sort(() => Math.random() - 0.5).slice(0, 12);
+
+      const trackEl = document.getElementById("quoteTrack");
+      if (trackEl) {
+        const cardsHtml = quotes.map((q) => `
+          <div class="quote-card">
+            <span class="quote-mark">&ldquo;</span>
+            <div class="quote-head">
+              <span class="quote-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+              </span>
+              <span class="quote-question">${escapeHtml(q.label)}</span>
+            </div>
+            <p class="quote-text">${escapeHtml(q.text)}</p>
+          </div>`).join("");
+        trackEl.innerHTML = cardsHtml + cardsHtml;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSurveyData();
+
+      const track = document.getElementById("quoteTrack");
+      const prevBtn = document.getElementById("quotePrev");
+      const nextBtn = document.getElementById("quoteNext");
+      if (track && prevBtn && nextBtn) {
+        const step = () => {
+          const card = track.querySelector(".quote-card");
+          return (card ? card.offsetWidth : 280) + 18;
+        };
+        const cardCount = () => Math.floor(track.querySelectorAll(".quote-card").length / 2);
+        const slide = (i, animated) => {
+          track.style.transition = animated ? "transform 0.8s cubic-bezier(0.33, 1, 0.68, 1)" : "none";
+          track.style.transform = "translateX(" + (-i * step()) + "px)";
+        };
+        const goNext = () => {
+          let count = cardCount();
+          if (!count) return;
+          index = index + 1;
+          if (index >= count) { index = 0; slide(index, false); }
+          else { slide(index, true); }
+        };
+        const goPrev = () => {
+          let count = cardCount();
+          if (!count) return;
+          index = index - 1;
+          if (index < 0) { index = count - 1; slide(index, false); }
+          else { slide(index, true); }
+        };
+        let index = 0;
+        prevBtn.addEventListener("click", () => { goPrev(); restartAuto(); });
+        nextBtn.addEventListener("click", () => { goNext(); restartAuto(); });
+
+        let autoTimer = null;
+        const stopAuto = () => clearInterval(autoTimer);
+        const startAuto = () => {
+          stopAuto();
+          autoTimer = setInterval(goNext, 6000);
+        };
+        const restartAuto = () => startAuto();
+        track.addEventListener("mouseenter", stopAuto);
+        track.addEventListener("mouseleave", startAuto);
+        startAuto();
+      }
+
+      const evoTrack = document.getElementById("evoTrack");
+      const evoPrevBtn = document.getElementById("evoPrev");
+      const evoNextBtn = document.getElementById("evoNext");
+      if (evoTrack && evoPrevBtn && evoNextBtn) {
+        evoTrack.innerHTML = evoTrack.innerHTML + evoTrack.innerHTML;
+        const evoStep = () => {
+          const card = evoTrack.querySelector(".evo-feature");
+          return (card ? card.offsetWidth : 160) + 18;
+        };
+        const evoCardCount = () => Math.floor(evoTrack.querySelectorAll(".evo-feature").length / 2);
+        const evoSlide = (i, animated) => {
+          evoTrack.style.transition = animated ? "transform 0.8s cubic-bezier(0.33, 1, 0.68, 1)" : "none";
+          evoTrack.style.transform = "translateX(" + (-i * evoStep()) + "px)";
+        };
+        const evoGoNext = () => {
+          let count = evoCardCount();
+          if (!count) return;
+          evoIndex = evoIndex + 1;
+          if (evoIndex >= count) { evoIndex = 0; evoSlide(evoIndex, false); }
+          else { evoSlide(evoIndex, true); }
+        };
+        const evoGoPrev = () => {
+          let count = evoCardCount();
+          if (!count) return;
+          evoIndex = evoIndex - 1;
+          if (evoIndex < 0) { evoIndex = count - 1; evoSlide(evoIndex, false); }
+          else { evoSlide(evoIndex, true); }
+        };
+        let evoIndex = 0;
+        evoPrevBtn.addEventListener("click", () => { evoGoPrev(); evoRestartAuto(); });
+        evoNextBtn.addEventListener("click", () => { evoGoNext(); evoRestartAuto(); });
+
+        let evoAutoTimer = null;
+        const evoStopAuto = () => clearInterval(evoAutoTimer);
+        const evoStartAuto = () => {
+          evoStopAuto();
+          evoAutoTimer = setInterval(evoGoNext, 6000);
+        };
+        const evoRestartAuto = () => evoStartAuto();
+        evoTrack.addEventListener("mouseenter", evoStopAuto);
+        evoTrack.addEventListener("mouseleave", evoStartAuto);
+        evoStartAuto();
+      }
+    });
+  </script>
+
+  <script>
+    (function () {
+      var evo = document.querySelector('.evolution-section');
+      if (!evo) return;
+      var started = false;
+      function reveal() {
+        if (started) return;
+        started = true;
+        evo.classList.add('in-view');
+      }
+      function inView() {
+        var r = evo.getBoundingClientRect();
+        return r.top < window.innerHeight && r.bottom > 0;
+      }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { reveal(); io.disconnect(); }
+          });
+        }, { threshold: 0.12 });
+        io.observe(evo);
+        setTimeout(function () { if (inView()) reveal(); }, 800);
+      } else {
+        reveal();
+      }
+    })();
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var carouselEl = document.getElementById('carouselAirSenseAI');
+      if (carouselEl) {
+        new bootstrap.Carousel(carouselEl, { interval: 4000, ride: true, wrap: true });
+      }
+    });
+  </script>
+
+  <script src="{% static 'js/connection.js' %}"></script>
+
+  {% include 'partials/chat_agent.html' %}
+
+</body>
+</html>
