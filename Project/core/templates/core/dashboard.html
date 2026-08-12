@@ -52,10 +52,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-  <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}"/>
+  <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}?v=6"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js" defer></script>
-  <script src="{% static 'core/js/script.js' %}" defer></script>
+  <script src="{% static 'core/js/script.js' %}?v=4" defer></script>
 </head>
 <body>
 
@@ -75,6 +75,9 @@
       <a href="{% url 'documentacion' %}" class="nav-link">Documentación</a>
     </nav>
     <div class="header-actions">
+      <a href="https://www.instagram.com/airsensearg/" target="_blank" rel="noopener" class="header-instagram" aria-label="Instagram de AirSense" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
       <div class="conn-status" id="connStatus" title="Estado de conexión">
         <span class="dot"></span>
         <span class="conn-label">Conectando…</span>
@@ -141,8 +144,14 @@
               <div class="metric-icon icon-temp" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
               </div>
-              <div>
-                <h3 class="metric-label">Temperatura</h3>
+              <div class="metric-title">
+                <div class="metric-label-row">
+                  <h3 class="metric-label">Temperatura</h3>
+                  <button type="button" class="metric-tip" aria-label="Información sobre Temperatura" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    <span class="metric-tip-text">Mide la temperatura ambiente en grados Celsius (°C). El rango óptimo según OMS/ASHRAE es de 18 a 26 °C; por debajo de 15 °C o por encima de 30 °C se considera peligroso.</span>
+                  </button>
+                </div>
                 <p class="metric-sub">Sensor SHT30</p>
               </div>
             </div>
@@ -159,8 +168,14 @@
               <div class="metric-icon icon-hum" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11z"/></svg>
               </div>
-              <div>
-                <h3 class="metric-label">Humedad</h3>
+              <div class="metric-title">
+                <div class="metric-label-row">
+                  <h3 class="metric-label">Humedad</h3>
+                  <button type="button" class="metric-tip" aria-label="Información sobre Humedad" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    <span class="metric-tip-text">Indica el porcentaje de humedad relativa del aire. El nivel óptimo es de 40% a 60%; por fuera de 30% a 70% resulta poco saludable para las personas.</span>
+                  </button>
+                </div>
                 <p class="metric-sub">Sensor SHT30</p>
               </div>
             </div>
@@ -177,8 +192,14 @@
               <div class="metric-icon icon-noise" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
               </div>
-              <div>
-                <h3 class="metric-label">Nivel de Ruido</h3>
+              <div class="metric-title">
+                <div class="metric-label-row">
+                  <h3 class="metric-label">Nivel de Ruido</h3>
+                  <button type="button" class="metric-tip" aria-label="Información sobre Nivel de Ruido" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    <span class="metric-tip-text">Mide la intensidad sonora en decibelios (dB). Se considera bajo hasta 50 dB, elevado entre 50 y 70 dB, y muy ruidoso por encima de 70 dB.</span>
+                  </button>
+                </div>
                 <p class="metric-sub">Micrófono MAX4466</p>
               </div>
             </div>
@@ -195,8 +216,14 @@
               <div class="metric-icon icon-co2" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10a3 3 0 1 0-3-3"/><path d="M3 12h14a3 3 0 1 1-3 3"/><path d="M3 16h7a2.5 2.5 0 1 1-2.5 2.5"/></svg>
               </div>
-              <div>
-                <h3 class="metric-label">Calidad del Aire</h3>
+              <div class="metric-title">
+                <div class="metric-label-row">
+                  <h3 class="metric-label">Calidad del Aire</h3>
+                  <button type="button" class="metric-tip" aria-label="Información sobre Calidad del Aire" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    <span class="metric-tip-text">Mide la concentración de CO₂ en partes por millón (ppm). Se considera aire fresco hasta 800 ppm, entre 800 y 1200 ppm conviene ventilar, y por encima de 1200 ppm es aire viciado.</span>
+                  </button>
+                </div>
                 <p class="metric-sub">Sensor MQ135</p>
               </div>
             </div>

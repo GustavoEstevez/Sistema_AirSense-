@@ -269,7 +269,10 @@
 
   function setMetric(valueEl, statusEl, trendEl, value, classifier, key) {
     const num = (value == null || isNaN(value)) ? null : Number(value);
-    if (valueEl) valueEl.textContent = num == null ? '--' : num;
+    if (valueEl) {
+      valueEl.textContent = num == null ? '--' : num;
+      valueEl.classList.toggle('is-long', num != null && String(num).replace('-', '').length >= 4);
+    }
     const c = classifier(num);
     if (statusEl) {
       statusEl.textContent = c.label;
@@ -350,7 +353,7 @@
         },
         scales: {
           x: { display: false, grid: { display: false } },
-          y: { grid: { color: 'rgba(15,33,71,0.06)' }, ticks: { color: '#6b7693', font: { size: 11 } } },
+          y: { grid: { color: 'rgba(8,131,149,0.08)' }, ticks: { color: '#5a7f8a', font: { size: 11 } } },
         },
         animation: { duration: 400 },
       },
@@ -361,9 +364,9 @@
     const noiseCtx = document.getElementById('noiseChart');
     const co2Ctx   = document.getElementById('co2Chart');
 
-    if (tempCtx)  charts.temp  = new Chart(tempCtx,  baseOpts('#f43f5e', REFS.temp));
-    if (humCtx)   charts.hum   = new Chart(humCtx,   baseOpts('#06b6d4', REFS.hum));
-    if (noiseCtx) charts.noise = new Chart(noiseCtx, baseOpts('#7c3aed', REFS.noise));
+    if (tempCtx)  charts.temp  = new Chart(tempCtx,  baseOpts('#088395', REFS.temp));
+    if (humCtx)   charts.hum   = new Chart(humCtx,   baseOpts('#00b3d6', REFS.hum));
+    if (noiseCtx) charts.noise = new Chart(noiseCtx, baseOpts('#f59e0b', REFS.noise));
     if (co2Ctx)   charts.co2   = new Chart(co2Ctx,   baseOpts('#10b981', REFS.co2));
 
     seedMockHistory();
@@ -503,9 +506,39 @@
     });
   }
 
+  /* ── Popover informativo de métricas (ⓘ) ── */
+  function initMetricToggles() {
+    const closeAll = () => {
+      document.querySelectorAll('.metric-tip.is-open').forEach((b) => {
+        b.classList.remove('is-open');
+        b.setAttribute('aria-expanded', 'false');
+      });
+    };
+    document.querySelectorAll('.metric-tip').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !btn.classList.contains('is-open');
+        closeAll();
+        if (willOpen) {
+          btn.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+    document.addEventListener('click', closeAll);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAll();
+    });
+  }
+
+  function boot() {
+    if (typeof start === 'function') start();
+    initMetricToggles();
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
-    start();
+    boot();
   }
 })();

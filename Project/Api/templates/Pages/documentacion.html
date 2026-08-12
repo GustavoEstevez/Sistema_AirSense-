@@ -73,6 +73,9 @@
       <a href="{% url 'documentacion' %}" class="nav-link {% if request.resolver_match.url_name == 'documentacion' %}active{% endif %}">Documentación</a>
     </nav>
     <div class="header-actions">
+      <a href="https://www.instagram.com/airsensearg/" target="_blank" rel="noopener" class="header-instagram" aria-label="Instagram de AirSense" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
       <a href="{% url 'dashboard:home' %}" class="btn-live">
         <span class="live-dot"></span>
         <span class="btn-live-label">Ver en vivo</span>
@@ -123,27 +126,27 @@
 
           <div class="tab-pane fade show active" id="campo" role="tabpanel">
             <iframe
-              src="{% static 'src/CarpetaDeCampo.pdf' %}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+              src="{% static 'src/Carpeta_de_Campo_AIRSENSE.pdf' %}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
               title="Carpeta de Campo — AirSense"
               class="doc-iframe"
               loading="lazy"
             ></iframe>
             <div class="doc-fallback">
               ¿No podés ver el PDF?
-              <a href="{% static 'src/CarpetaDeCampo.pdf' %}" target="_blank" rel="noopener">Descargá la Carpeta de Campo</a>
+              <a href="{% static 'src/Carpeta_de_Campo_AIRSENSE.pdf' %}" target="_blank" rel="noopener">Descargá la Carpeta de Campo</a>
             </div>
           </div>
 
           <div class="tab-pane fade" id="informe" role="tabpanel">
             <iframe
-              src="{% static 'src/InformeAirSense.pdf' %}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+              src="{% static 'src/Airsense_informe_tecnico.pdf' %}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
               title="Informe Técnico — AirSense"
               class="doc-iframe"
               loading="lazy"
             ></iframe>
             <div class="doc-fallback">
               ¿No podés ver el PDF?
-              <a href="{% static 'src/InformeAirSense.pdf' %}" target="_blank" rel="noopener">Descargá el Informe Técnico</a>
+              <a href="{% static 'src/Airsense_informe_tecnico.pdf' %}" target="_blank" rel="noopener">Descargá el Informe Técnico</a>
             </div>
           </div>
 
