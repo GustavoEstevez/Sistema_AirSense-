@@ -6,6 +6,9 @@ def Home(request):
 def HomeAI(request):
     return render(request, 'HomeAI.html')
 
+def HomeBeta(request):
+    return render(request, 'HomeBeta.html')
+
 def dashboard(request):
     return redirect('dashboard:home')
 
