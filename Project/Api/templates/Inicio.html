@@ -58,11 +58,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-  <link rel="stylesheet" href="{% static 'css/inicio.css' %}?v=2"/>
+  <link rel="stylesheet" href="{% static 'css/inicio.css' %}?v=3"/>
 </head>
-<body class="page-beta">
+<body class="page-stand">
 
   <!-- ── HEADER ── -->
   <header>
@@ -74,7 +73,7 @@
       </span>
     </a>
     <nav id="siteNav">
-      <a href="{% url 'HomeBeta' %}" class="nav-link active">Inicio</a>
+      <a href="{% url 'HomeBeta' %}" class="nav-link {% if request.resolver_match.url_name == 'HomeBeta' %}active{% endif %}">Inicio</a>
       <a href="{% url 'HomeAI' %}" class="nav-link {% if request.resolver_match.url_name == 'HomeAI' %}active{% endif %}"><span class="nav-badge">Nuevo</span><span class="nav-badge-text">AirSense AI</span></a>
       <a href="{% url 'Home' %}" class="nav-link {% if request.resolver_match.url_name == 'Home' %}active{% endif %}">AirSense Classic</a>
       <a href="{% url 'dashboard:home' %}" class="nav-link {% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}">Dashboard</a>
@@ -83,10 +82,6 @@
     <div class="header-actions">
       <a href="https://www.instagram.com/airsensearg/" target="_blank" rel="noopener" class="header-instagram" aria-label="Instagram de AirSense" title="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-      </a>
-      <a href="{% url 'dashboard:home' %}" class="btn-live">
-        <span class="live-dot"></span>
-        <span class="btn-live-label">Ver en vivo</span>
       </a>
       <button type="button" class="theme-toggle" id="themeToggle" role="switch" aria-label="Cambiar a modo oscuro o claro" title="Cambiar tema">
         <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19"/></svg>
@@ -103,125 +98,458 @@
 
   <main>
 
-    <!-- ══ CARRUSEL CON PARALLAX ══ -->
-    <section class="inicio-hero" id="inicioCarousel" tabindex="-1"
-             aria-roledescription="carrusel" aria-label="Destacados de AirSense">
+    <!-- ── STAND DIGITAL ACTE 2026 ── -->
+    <div class="sp-stage" id="standDigital">
 
-      <div class="ihc-slide is-active" aria-hidden="false">
-        <div class="ihc-bg">
-          <img src="{% static 'src/Banners/Banner1.png' %}" alt="Estación AirSense midiendo el ambiente" loading="eager"/>
+      <span class="sp-bar" id="spBar" aria-hidden="true"></span>
+
+      <div class="sp-counter" aria-hidden="true"><b id="spCounterCurrent">01</b>&nbsp;/&nbsp;<span>17</span></div>
+
+      <nav class="sp-rail" aria-label="Progreso del recorrido por el stand">
+        <button type="button" class="sp-tick on" data-panel="p01" title="Portada" aria-label="Ir al panel 1: Portada"></button>
+        <button type="button" class="sp-tick" data-panel="p02" title="El problema" aria-label="Ir al panel 2: El problema"></button>
+        <button type="button" class="sp-tick" data-panel="p03" title="Pregunta investigable" aria-label="Ir al panel 3: Pregunta investigable"></button>
+        <button type="button" class="sp-tick" data-panel="p04" title="Hipótesis" aria-label="Ir al panel 4: Hipótesis"></button>
+        <button type="button" class="sp-tick" data-panel="p05" title="Investigamos" aria-label="Ir al panel 5: Investigamos"></button>
+        <button type="button" class="sp-tick" data-panel="p06" title="Cómo lo investigamos" aria-label="Ir al panel 6: Cómo lo investigamos"></button>
+        <button type="button" class="sp-tick" data-panel="p07" title="Desarrollo tecnológico" aria-label="Ir al panel 7: Desarrollo tecnológico"></button>
+        <button type="button" class="sp-tick" data-panel="p08" title="Pruebas en contexto real" aria-label="Ir al panel 8: Pruebas en contexto real"></button>
+        <button type="button" class="sp-tick" data-panel="p09" title="Resultados" aria-label="Ir al panel 9: Resultados"></button>
+        <button type="button" class="sp-tick" data-panel="p10" title="Los datos nos permitieron ver" aria-label="Ir al panel 10: Los datos nos permitieron ver"></button>
+        <button type="button" class="sp-tick" data-panel="p11" title="La comunidad" aria-label="Ir al panel 11: La comunidad"></button>
+        <button type="button" class="sp-tick" data-panel="p12" title="Nuestra respuesta" aria-label="Ir al panel 12: Nuestra respuesta"></button>
+        <button type="button" class="sp-tick" data-panel="p13" title="Visualizar para comprender" aria-label="Ir al panel 13: Visualizar para comprender"></button>
+        <button type="button" class="sp-tick" data-panel="p14" title="Lo que aprendimos" aria-label="Ir al panel 14: Lo que aprendimos"></button>
+        <button type="button" class="sp-tick" data-panel="p15" title="Conclusión" aria-label="Ir al panel 15: Conclusión"></button>
+        <button type="button" class="sp-tick" data-panel="p16" title="Proyección" aria-label="Ir al panel 16: Proyección"></button>
+        <button type="button" class="sp-tick" data-panel="p17" title="Cierre" aria-label="Ir al panel 17: Cierre"></button>
+      </nav>
+
+      <!-- ═══════════ PANEL 01 · PORTADA ═══════════ -->
+      <section class="sp-panel sp--dark sp-center" id="p01">
+        <div class="sp-bg" data-depth="0.14" aria-hidden="true">
+          <img src="{% static 'src/Banners/BannerAI1.png' %}" alt="" loading="eager"/>
+          <span class="sp-veil"></span>
         </div>
-        <div class="ihc-content">
-          <div class="ihc-inner">
-            <span class="ihc-eyebrow">Monitoreo ambiental inteligente</span>
-            <h1 class="ihc-title">Medimos el aire que <span>respirás</span></h1>
-            <p class="ihc-desc">Temperatura, humedad, ruido y calidad del aire en tiempo real, con alertas automáticas cuando el ambiente deja de ser saludable.</p>
-            <div class="ihc-actions">
-              <a href="{% url 'dashboard:home' %}" class="ihc-btn ihc-btn--primary">Ver dashboard en vivo</a>
-              <a href="{% url 'HomeAI' %}" class="ihc-btn ihc-btn--ghost">Conocer AirSense AI</a>
-            </div>
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.05" aria-hidden="true">01</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Feria de Educación, Arte, Ciencias y Tecnología · ACTE 2026</span>
+          <h1 class="rv rv-2 sp-h1">¿Es saludable el ambiente de los espacios donde pasamos buena parte del día?</h1>
+          <p class="rv rv-3 sp-text">AirSense es un proyecto de investigación y desarrollo tecnológico que busca estudiar las condiciones ambientales de los espacios cerrados y generar herramientas para comprenderlas y mejorarlas.</p>
+          <div class="rv rv-4 sp-chips" aria-hidden="true">
+            <span class="sp-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>Temperatura</span>
+            <span class="sp-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5s6 7 6 11a6 6 0 1 1-12 0c0-4 6-11 6-11z"/></svg>Humedad</span>
+            <span class="sp-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>Ruido</span>
+            <span class="sp-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10a3 3 0 1 0-3-3"/><path d="M3 12h14a3 3 0 1 1-3 3"/><path d="M3 16h7a2.5 2.5 0 1 1-2.5 2.5"/></svg>Calidad del aire</span>
+          </div>
+          <p class="rv rv-5 sp-sub">Sistema de Monitoreo Ambiental</p>
+        </div>
+        <div class="sp-scrollhint" aria-hidden="true">
+          <span>Recorrer el stand</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </section>
+
+      <!-- ═══════════ PANEL 02 · EL PROBLEMA ═══════════ -->
+      <section class="sp-panel" id="p02">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">02</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">El punto de partida</span>
+          <h2 class="rv rv-2 sp-title">¿Qué estaba pasando?</h2>
+          <p class="rv rv-3 sp-text">Muchas veces, la temperatura, la humedad, el ruido o la calidad del aire de los espacios cerrados pueden alejarse de los valores recomendados sin que las personas presentes lo perciban.</p>
+          <p class="rv rv-4 sp-highlight">El problema no siempre se ve. Pero puede medirse.</p>
+          <p class="rv rv-5 sp-text">Durante nuestra investigación observamos que el control del ambiente queda muchas veces sujeto a la percepción de estudiantes y docentes, mientras que no siempre existen herramientas para obtener información objetiva.</p>
+          <div class="rv rv-5 sp-chips" aria-hidden="true">
+            <span class="sp-chip">Temperatura</span>
+            <span class="sp-chip">Humedad</span>
+            <span class="sp-chip">Ruido</span>
+            <span class="sp-chip">Calidad del aire</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ihc-slide" aria-hidden="true">
-        <div class="ihc-bg">
-          <img src="{% static 'src/Banners/Banner2.png' %}" alt="Sensores del sistema AirSense" loading="lazy"/>
+      <!-- ═══════════ PANEL 03 · PREGUNTA INVESTIGABLE ═══════════ -->
+      <section class="sp-panel sp-center" id="p03">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-orb" style="width:min(46vw,520px);aspect-ratio:1;left:-10%;top:-18%;" data-depth="-0.1" aria-hidden="true"></span>
+        <span class="sp-orb" style="width:min(30vw,340px);aspect-ratio:1;right:-6%;bottom:-20%;" data-depth="-0.07" aria-hidden="true"></span>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">03</span>
+        <div class="sp-content">
+          <span class="rv rv-1 sp-kicker">Pregunta investigable</span>
+          <h2 class="rv rv-2 sp-title">¿Qué quisimos investigar?</h2>
+          <p class="rv rv-3 sp-highlight">¿Es posible construir un sistema portátil y de bajo costo que mida la calidad ambiental de espacios cerrados y permita informar en tiempo real si las condiciones son saludables?</p>
+          <p class="rv rv-4 sp-text">Esta pregunta dio origen al proyecto AIRSENSE.</p>
         </div>
-        <div class="ihc-content">
-          <div class="ihc-inner">
-            <span class="ihc-eyebrow">ESP32 + Sensores + IA</span>
-            <h1 class="ihc-title">Datos en vivo, <span>decisiones inteligentes</span></h1>
-            <p class="ihc-desc">La estación transmite lecturas cada 2 segundos y la inteligencia artificial las transforma en recomendaciones concretas para ventilar y cuidar los espacios.</p>
-            <div class="ihc-actions">
-              <a href="{% url 'documentacion' %}" class="ihc-btn ihc-btn--primary">Ver documentación</a>
-              <a href="{% url 'historial' %}" class="ihc-btn ihc-btn--ghost">Historial de mediciones</a>
-            </div>
+      </section>
+
+      <!-- ═══════════ PANEL 04 · HIPÓTESIS ═══════════ -->
+      <section class="sp-panel" id="p04">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">04</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Nuestra hipótesis</span>
+          <h2 class="rv rv-2 sp-title">Lo que supusimos<br><span>y salimos a comprobar</span></h2>
+          <p class="rv rv-3 sp-text">Los espacios cerrados, como las aulas, pueden presentar condiciones ambientales que superan los valores recomendados sin que sus ocupantes sean conscientes de ello.</p>
+          <p class="rv rv-3 sp-text">Consideramos que un sistema electrónico de bajo costo podría detectar estas situaciones y generar alertas.</p>
+          <div class="rv rv-4 sp-flow sp-flow--v" role="list" aria-label="De la percepción a la evidencia">
+            <span class="sp-flow-step" role="listitem">Percepción</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8595;</span>
+            <span class="sp-flow-step" role="listitem">Medición</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8595;</span>
+            <span class="sp-flow-step" role="listitem">Evidencia</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ihc-slide" aria-hidden="true">
-        <div class="ihc-bg">
-          <img src="{% static 'src/Banners/Banner3.png' %}" alt="Equipo de AirSense" loading="lazy"/>
+      <!-- ═══════════ PANEL 05 · INVESTIGAMOS ═══════════ -->
+      <section class="sp-panel sp-center" id="p05">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">05</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Marco de referencia</span>
+          <h2 class="rv rv-2 sp-title">Antes de construir, <span>investigamos</span>.</h2>
+          <p class="rv rv-3 sp-text">Analizamos los parámetros ambientales que pueden afectar las condiciones de los espacios cerrados y establecimos valores de referencia para nuestras mediciones.</p>
+          <div class="rv rv-4 sp-cards">
+            <article class="sp-card">
+              <h3>Temperatura</h3>
+              <span class="sp-val">18 °C – 26 °C</span>
+              <p>Rango de referencia para espacios ocupados.</p>
+            </article>
+            <article class="sp-card">
+              <h3>Humedad relativa</h3>
+              <span class="sp-val">40 % – 60 %</span>
+              <p>Rango considerado saludable para las personas.</p>
+            </article>
+            <article class="sp-card">
+              <h3>Ruido en aula</h3>
+              <span class="sp-val">&lt; 55 dB</span>
+              <p>Nivel que no interfiere con la comunicación.</p>
+            </article>
+          </div>
+          <p class="rv rv-5 sp-note">Estos valores fueron utilizados como referencia para analizar las condiciones observadas durante las pruebas.</p>
         </div>
-        <div class="ihc-content">
-          <div class="ihc-inner">
-            <span class="ihc-eyebrow">Hecho por estudiantes · Feria ACTE 2026</span>
-            <h1 class="ihc-title">Tecnología creada en <span>nuestra escuela</span></h1>
-            <p class="ihc-desc">Un proyecto de la E.E.S.T N°1 que combina hardware Arduino, desarrollo web e investigación para responder una pregunta simple: ¿el aire de nuestra escuela es saludable?</p>
-            <div class="ihc-actions">
-              <a href="{% url 'Home' %}" class="ihc-btn ihc-btn--primary">Conocer AirSense Classic</a>
-              <a href="https://www.instagram.com/airsensearg/" target="_blank" rel="noopener" class="ihc-btn ihc-btn--ghost">Seguir en Instagram</a>
+      </section>
+
+      <!-- ═══════════ PANEL 06 · DE LA PREGUNTA A LA INVESTIGACIÓN ═══════════ -->
+      <section class="sp-panel" id="p06">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">06</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Proceso de investigación</span>
+          <h2 class="rv rv-2 sp-title">¿Cómo lo investigamos?</h2>
+          <div class="rv rv-3 sp-flow" role="list" aria-label="Pasos del proceso">
+            <span class="sp-flow-step" role="listitem">Observar</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Diseñar</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Construir</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Medir</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Analizar</span>
+          </div>
+          <p class="rv rv-4 sp-text">Desarrollamos un sistema capaz de registrar variables ambientales y utilizamos las mediciones obtenidas para analizar lo que ocurría en distintos espacios.</p>
+          <p class="rv rv-5 sp-text">El proyecto evolucionó a partir de pruebas, errores, modificaciones y nuevas decisiones de diseño.</p>
+        </div>
+      </section>
+
+      <!-- ═══════════ PANEL 07 · EL DESARROLLO TECNOLÓGICO ═══════════ -->
+      <section class="sp-panel" id="p07">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">07</span>
+        <div class="sp-content" data-depth="0.02">
+          <span class="rv rv-1 sp-kicker">Desarrollo tecnológico</span>
+          <h2 class="rv rv-2 sp-title">Construimos una herramienta <span>para investigar</span>.</h2>
+          <p class="rv rv-3 sp-text">Para obtener información objetiva desarrollamos un sistema portátil de monitoreo ambiental.</p>
+          <div class="rv rv-3 sp-chips" aria-hidden="true">
+            <span class="sp-chip">Temperatura</span>
+            <span class="sp-chip">Humedad</span>
+            <span class="sp-chip">Ruido</span>
+            <span class="sp-chip">Calidad del aire estimada</span>
+          </div>
+          <div class="rv rv-4 sp-evo">
+            <article class="sp-evo-item">
+              <img src="{% static 'src/Fotos/Arduino.png' %}" alt="Placa Arduino UNO" loading="lazy"/>
+              <h3>Arduino UNO</h3>
+              <p>Primera versión del sistema.</p>
+            </article>
+            <article class="sp-evo-item">
+              <img src="{% static 'src/Fotos/AirSenseClassic.png' %}" alt="Prototipo inicial de AirSense" loading="lazy"/>
+              <h3>Prototipo inicial</h3>
+              <p>Primeras pruebas y ajustes.</p>
+            </article>
+            <article class="sp-evo-item">
+              <img src="{% static 'src/Fotos/ESP32.png' %}" alt="Placa ESP32" loading="lazy"/>
+              <h3>ESP32</h3>
+              <p>Nueva base electrónica del sistema.</p>
+            </article>
+            <article class="sp-evo-item">
+              <img src="{% static 'src/Fotos/Dispositivo.png' %}" alt="Versión actual del dispositivo AirSense" loading="lazy"/>
+              <h3>Versión actual</h3>
+              <p>Sensores, pantalla y carcasa mejorados.</p>
+            </article>
+          </div>
+          <p class="rv rv-5 sp-text">El prototipo evolucionó desde una primera versión basada en Arduino UNO hacia una versión actual basada en ESP32, incorporando mejoras en sensores, visualización, conectividad y autonomía.</p>
+        </div>
+      </section>
+
+      <!-- ═══════════ PANEL 08 · PRUEBAS EN CONTEXTO REAL ═══════════ -->
+      <section class="sp-panel sp-center" id="p08">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-orb" style="width:min(40vw,460px);aspect-ratio:1;right:-8%;top:-22%;" data-depth="-0.09" aria-hidden="true"></span>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">08</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Pruebas en contexto real</span>
+          <h2 class="rv rv-2 sp-title">¿Qué ocurrió cuando lo probamos?</h2>
+          <p class="rv rv-3 sp-text">Realizamos pruebas en tres contextos diferentes: el aula del curso, el patio cubierto y el laboratorio de computación.</p>
+          <p class="rv rv-3 sp-big">5 lecturas por lugar</p>
+          <div class="rv rv-4 sp-contexts">
+            <div class="sp-ctx">
+              <span class="sp-ctx-dot" aria-hidden="true"></span>
+              <h3>Aula del curso</h3>
+            </div>
+            <div class="sp-ctx">
+              <span class="sp-ctx-dot" aria-hidden="true"></span>
+              <h3>Patio cubierto</h3>
+            </div>
+            <div class="sp-ctx">
+              <span class="sp-ctx-dot" aria-hidden="true"></span>
+              <h3>Laboratorio de computación</h3>
             </div>
           </div>
+          <p class="rv rv-5 sp-text">Las mediciones permitieron observar cómo variaban las condiciones ambientales según el espacio y el contexto.</p>
         </div>
-      </div>
+      </section>
 
-      <button type="button" class="ihc-arrow ihc-arrow--prev" aria-label="Slide anterior">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button type="button" class="ihc-arrow ihc-arrow--next" aria-label="Slide siguiente">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
+      <!-- ═══════════ PANEL 09 · RESULTADOS ═══════════ -->
+      <section class="sp-panel sp--dark sp-center" id="p09">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">09</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Resultados</span>
+          <h2 class="rv rv-2 sp-title">¿Qué encontramos?</h2>
+          <div class="rv rv-3 sp-stats">
+            <article class="sp-stat">
+              <span class="sp-stat-value">3 de 5</span>
+              <p class="sp-stat-desc">jornadas de medición del aula presentaron temperaturas superiores a 26 °C.</p>
+            </article>
+            <article class="sp-stat">
+              <span class="sp-stat-value">4 de 5</span>
+              <p class="sp-stat-desc">jornadas presentaron niveles de ruido superiores a 55 dB.</p>
+            </article>
+            <article class="sp-stat">
+              <span class="sp-stat-value">5 de 5</span>
+              <p class="sp-stat-desc">jornadas mantuvieron la humedad dentro del rango saludable.</p>
+            </article>
+            <article class="sp-stat">
+              <span class="sp-stat-value">100 %</span>
+              <p class="sp-stat-desc">de las pruebas realizadas del prototipo funcionaron correctamente.</p>
+            </article>
+          </div>
+          <p class="rv rv-4 sp-text">El ruido fue el parámetro que apareció con mayor frecuencia fuera del rango de referencia.</p>
+        </div>
+      </section>
 
-      <div class="ihc-dots" role="group" aria-label="Seleccionar slide">
-        <button type="button" class="ihc-dot is-active" aria-label="Ir al slide 1" aria-current="true"></button>
-        <button type="button" class="ihc-dot" aria-label="Ir al slide 2"></button>
-        <button type="button" class="ihc-dot" aria-label="Ir al slide 3"></button>
-      </div>
+      <!-- ═══════════ PANEL 10 · LOS DATOS NOS PERMITIERON VER ═══════════ -->
+      <section class="sp-panel sp--deep sp-center" id="p10">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-orb" style="width:min(52vw,600px);aspect-ratio:1;left:calc(50% - min(26vw,300px));top:calc(50% - min(26vw,300px));" data-depth="-0.08" aria-hidden="true"></span>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">10</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">El punto central del stand</span>
+          <h2 class="rv rv-2 sp-title">Los datos hicieron visible el problema.</h2>
+          <p class="rv rv-3 sp-text">Los resultados mostraron que las condiciones ambientales no son constantes y que pueden variar según el momento, el espacio y la cantidad de personas presentes.</p>
+          <p class="rv rv-4 sp-highlight">Lo que percibimos no siempre alcanza para comprender lo que está ocurriendo.</p>
+          <div class="rv rv-5 sp-flow" role="list" aria-label="De la percepción a la comprensión">
+            <span class="sp-flow-step" role="listitem">Percepción</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Medición</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Datos</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Comprensión</span>
+          </div>
+          <p class="rv rv-5 sp-text">El monitoreo permite transformar una percepción subjetiva en información que puede ser observada, comparada y analizada.</p>
+        </div>
+      </section>
 
-      <span class="ihc-progress" id="ihcProgress" aria-hidden="true"></span>
-    </section>
+      <!-- ═══════════ PANEL 11 · LA COMUNIDAD ═══════════ -->
+      <section class="sp-panel sp-center" id="p11">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">11</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">La comunidad educativa</span>
+          <h2 class="rv rv-2 sp-title">¿Qué piensa nuestra comunidad?</h2>
+          <p class="rv rv-3 sp-big">Queremos conocer la experiencia de quienes habitan nuestros espacios.</p>
+          <p class="rv rv-3 sp-text">Además de medir las condiciones ambientales, buscamos incorporar la percepción de estudiantes, docentes y demás integrantes de nuestra comunidad educativa.</p>
+          <div class="rv rv-4 sp-questions">
+            <div class="sp-q">&iquest;Qu&eacute; espacios perciben como m&aacute;s inc&oacute;modos?</div>
+            <div class="sp-q">&iquest;Qu&eacute; problemas ambientales identifican?</div>
+            <div class="sp-q">&iquest;En qu&eacute; momentos los perciben?</div>
+            <div class="sp-q">&iquest;Consideran &uacute;til contar con informaci&oacute;n ambiental?</div>
+          </div>
+        </div>
+      </section>
 
-    <!-- ══ SECCIÓN 1 (renombrar según contenido) ══ -->
-    <section class="home-section">
-      <div class="home-container">
-        <span class="section-eyebrow">Sección 1</span>
-        <h2 class="section-title">Título de sección</h2>
-        <p class="section-desc">Descripción breve de esta sección.</p>
-      </div>
-    </section>
+      <!-- ═══════════ PANEL 12 · NUESTRA RESPUESTA ═══════════ -->
+      <section class="sp-panel sp--dark sp-center" id="p12">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-orb" style="width:min(44vw,500px);aspect-ratio:1;left:-12%;bottom:-24%;" data-depth="-0.09" aria-hidden="true"></span>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">12</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Nuestra respuesta</span>
+          <h2 class="rv rv-2 sp-title">&iquest;C&oacute;mo respondemos al problema?</h2>
+          <p class="rv rv-3 sp-text">A partir de la investigaci&oacute;n desarrollamos AIRSENSE: un sistema de monitoreo ambiental que permite registrar, visualizar y analizar las condiciones de un espacio.</p>
+          <div class="rv rv-4 sp-flow" role="list" aria-label="De medir a analizar">
+            <span class="sp-flow-step" role="listitem">Medir</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Registrar</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Visualizar</span>
+            <span class="sp-flow-sep" aria-hidden="true">&#8594;</span>
+            <span class="sp-flow-step" role="listitem">Analizar</span>
+          </div>
+          <p class="rv rv-5 sp-text">La tecnolog&iacute;a se convierte as&iacute; en una herramienta para investigar nuestro propio entorno.</p>
+        </div>
+      </section>
 
-    <!-- ══ SECCIÓN 2 (renombrar según contenido) ══ -->
-    <section class="home-section section-alt">
-      <div class="home-container">
-        <span class="section-eyebrow">Sección 2</span>
-        <h2 class="section-title">Otra sección</h2>
-        <p class="section-desc">Agregar acá el contenido: cards, grillas, imágenes, etc.</p>
-      </div>
-    </section>
-
-    <!-- ── FOOTER ── -->
-    <footer class="home-footer">
-      <div class="home-container footer-inner">
-        <div class="footer-brand">
-          <a href="{% url 'HomeAI' %}" class="logo">
-            <img src="{% static 'src/Logos/LogoAirSense.png' %}" alt="AirSense" class="logo-img" style="height:48px;"/>
-            <span class="logo-text">Air<span>Sense</span></span>
+      <!-- ═══════════ PANEL 13 · VISUALIZAR PARA COMPRENDER ═══════════ -->
+      <section class="sp-panel" id="p13">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">13</span>
+        <div class="sp-content" data-depth="0.02">
+          <span class="rv rv-1 sp-kicker">Herramienta de an&aacute;lisis</span>
+          <h2 class="rv rv-2 sp-title">De las mediciones a la informaci&oacute;n.</h2>
+          <p class="rv rv-3 sp-text">El dashboard permite visualizar la evoluci&oacute;n de las variables ambientales y detectar momentos en los que las condiciones se alejan de los valores de referencia.</p>
+          <div class="rv rv-3 sp-chips" aria-hidden="true">
+            <span class="sp-chip">Temperatura</span>
+            <span class="sp-chip">Humedad</span>
+            <span class="sp-chip">Ruido</span>
+            <span class="sp-chip">Gr&aacute;ficos</span>
+            <span class="sp-chip">Estado ambiental</span>
+          </div>
+          <figure class="rv rv-4 sp-shot">
+            <img src="{% static 'src/Fotos/DashboardLive.jpg' %}" alt="Vista del dashboard de AirSense con gr&aacute;ficos de las variables ambientales" loading="lazy"/>
+          </figure>
+          <a href="{% url 'dashboard:home' %}" class="rv rv-5 sp-link">Explorar el dashboard
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <p>Monitoreo ambiental inteligente.<br>Proyecto de Feria ACTE 2026 · E.E.S.T. N°1</p>
         </div>
-        <div class="footer-links">
-          <a href="{% url 'HomeBeta' %}">Inicio</a>
-          <a href="{% url 'HomeAI' %}" class="footer-link-ai"><span class="nav-badge">Nuevo</span><span class="nav-badge-text">AirSense AI</span></a>
-          <a href="{% url 'Home' %}">AirSense Classic</a>
-          <a href="{% url 'dashboard:home' %}">Dashboard</a>
-          <a href="{% url 'documentacion' %}">Documentación</a>
-          <a href="https://www.instagram.com/airsensearg/" target="_blank" rel="noopener">Instagram</a>
+      </section>
+
+      <!-- ═══════════ PANEL 14 · LO QUE APRENDIMOS ═══════════ -->
+      <section class="sp-panel sp-center" id="p14">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">14</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Aprendizajes</span>
+          <h2 class="rv rv-2 sp-title">&iquest;Qu&eacute; aprendimos?</h2>
+          <div class="rv rv-3 sp-learn">
+            <article class="sp-learn-card">
+              <h3>INVESTIGAR</h3>
+              <p>Aprendimos a formular preguntas, buscar informaci&oacute;n, observar y recolectar datos.</p>
+            </article>
+            <article class="sp-learn-card">
+              <h3>DESARROLLAR</h3>
+              <p>Aprendimos a dise&ntilde;ar, programar, construir y mejorar un sistema tecnol&oacute;gico a partir de problemas concretos.</p>
+            </article>
+            <article class="sp-learn-card">
+              <h3>ANALIZAR</h3>
+              <p>Aprendimos que los datos permiten identificar situaciones que pueden pasar desapercibidas.</p>
+            </article>
+            <article class="sp-learn-card">
+              <h3>TRABAJAR EN EQUIPO</h3>
+              <p>Aprendimos a resolver problemas, tomar decisiones y mejorar nuestras ideas durante el proceso.</p>
+            </article>
+          </div>
+          <p class="rv rv-5 sp-text">El proyecto no fue solamente construir un dispositivo. Fue aprender a investigar un problema y desarrollar una respuesta a partir de lo que encontramos.</p>
         </div>
-        <div class="footer-meta">
-          <p>Área: Informática · Nivel Superior Secundario Técnico</p>
-          <p>© 2026 AirSense · Todos los derechos reservados</p>
+      </section>
+
+      <!-- ═══════════ PANEL 15 · CONCLUSI&Oacute;N ═══════════ -->
+      <section class="sp-panel" id="p15">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">15</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Conclusi&oacute;n</span>
+          <h2 class="rv rv-2 sp-title">&iquest;Qu&eacute; concluimos?</h2>
+          <p class="rv rv-3 sp-text">Las pruebas realizadas muestran que las condiciones ambientales de un aula pueden alejarse de los valores de referencia, especialmente en temperatura y ruido.</p>
+          <p class="rv rv-4 sp-text">AIRSENSE demostr&oacute; ser capaz de registrar estas variables y facilitar su visualizaci&oacute;n y an&aacute;lisis.</p>
+          <p class="rv rv-4 sp-highlight">Medir nos permite ver lo que antes s&oacute;lo pod&iacute;amos percibir.</p>
+          <p class="rv rv-5 sp-text">La tecnolog&iacute;a puede convertirse en una herramienta para comprender problemas cotidianos y generar conocimiento &uacute;til dentro de nuestra comunidad educativa.</p>
         </div>
-      </div>
-    </footer>
+      </section>
+
+      <!-- ═══════════ PANEL 16 · PROYECCI&Oacute;N ═══════════ -->
+      <section class="sp-panel sp--deep sp-center" id="p16">
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-orb" style="width:min(38vw,440px);aspect-ratio:1;right:-10%;top:-20%;" data-depth="-0.08" aria-hidden="true"></span>
+        <span class="sp-num" data-depth="-0.06" aria-hidden="true">16</span>
+        <div class="sp-content" data-depth="0.03">
+          <span class="rv rv-1 sp-kicker">Proyecci&oacute;n</span>
+          <h2 class="rv rv-2 sp-title">&iquest;Y ahora qu&eacute;?</h2>
+          <p class="rv rv-3 sp-text">El proyecto contin&uacute;a.</p>
+          <div class="rv rv-4 sp-next">
+            <div class="sp-step-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ampliar las mediciones</div>
+            <div class="sp-step-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Comparar diferentes espacios</div>
+            <div class="sp-step-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Incorporar la percepci&oacute;n de la comunidad</div>
+            <div class="sp-step-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Mejorar la transmisi&oacute;n de datos</div>
+            <div class="sp-step-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Continuar analizando los resultados</div>
+          </div>
+          <p class="rv rv-5 sp-highlight">Cada nueva medici&oacute;n puede abrir una nueva pregunta.</p>
+        </div>
+      </section>
+
+      <!-- ═══════════ PANEL 17 · CIERRE ═══════════ -->
+      <section class="sp-panel sp--deep sp-center" id="p17">
+        <div class="sp-bg" data-depth="0.12" aria-hidden="true">
+          <img src="{% static 'src/Banners/BannerAI3.png' %}" alt="" loading="lazy"/>
+          <span class="sp-veil"></span>
+        </div>
+        <div class="sp-deco sp-gridlines" aria-hidden="true"></div>
+        <span class="sp-num" data-depth="-0.05" aria-hidden="true">17</span>
+        <div class="sp-content" data-depth="0.03">
+          <h2 class="rv rv-1 sp-h1">Mejorar empieza por comprender.</h2>
+          <p class="rv rv-2 sp-text">AIRSENSE busca utilizar la tecnolog&iacute;a como herramienta para investigar, comprender y mejorar las condiciones ambientales de los espacios que habitamos.</p>
+          <p class="rv rv-3 sp-sub">Mejorando la calidad de vida mediante el monitoreo ambiental.</p>
+          <p class="rv rv-4 sp-note">AIRSENSE &middot; E.E.S.T. N&deg;1 &middot; ACTE 2026</p>
+        </div>
+      </section>
+
+    </div>
 
   </main>
 
-  <script src="{% static 'js/inicio.js' %}?v=2" defer></script>
+  <!-- ── FOOTER ── -->
+  <footer class="home-footer">
+    <div class="home-container footer-inner">
+      <div class="footer-brand">
+        <a href="{% url 'HomeAI' %}" class="logo">
+          <img src="{% static 'src/Logos/LogoAirSense.png' %}" alt="AirSense" class="logo-img" style="height:48px;"/>
+          <span class="logo-text">Air<span>Sense</span></span>
+        </a>
+        <p>Monitoreo ambiental inteligente.<br>Proyecto de Feria ACTE 2026 · E.E.S.T. N°1</p>
+      </div>
+      <div class="footer-links">
+        <a href="{% url 'HomeBeta' %}">Inicio</a>
+        <a href="{% url 'HomeAI' %}" class="footer-link-ai"><span class="nav-badge">Nuevo</span><span class="nav-badge-text">AirSense AI</span></a>
+        <a href="{% url 'Home' %}">AirSense Classic</a>
+        <a href="{% url 'dashboard:home' %}">Dashboard</a>
+        <a href="{% url 'documentacion' %}">Documentación</a>
+        <a href="https://www.instagram.com/airsensearg/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <div class="footer-meta">
+        <p>Área: Ingeniería y Tecnología · Categoría B · Feria ACTE 2026</p>
+        <p>© 2026 AirSense · Todos los derechos reservados</p>
+      </div>
+    </div>
+  </footer>
 
   {% include 'partials/chat_agent.html' %}
+
+  <script src="{% static 'js/inicio.js' %}?v=3" defer></script>
 
 </body>
 </html>

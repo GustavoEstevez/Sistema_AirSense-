@@ -1,166 +1,120 @@
-/* ── Carrusel con parallax al scroll — Página Inicio ── */
+/* ── Stand digital ACTE 2026 — parallax al scroll + progreso del recorrido ── */
 (function () {
   'use strict';
 
-  var carousel = document.getElementById('inicioCarousel');
-  if (!carousel) return;
+  var stage = document.getElementById('standDigital');
+  if (!stage) return;
 
-  var slides = Array.prototype.slice.call(carousel.querySelectorAll('.ihc-slide'));
-  var dots = Array.prototype.slice.call(carousel.querySelectorAll('.ihc-dot'));
-  var progress = document.getElementById('ihcProgress');
-  var prevBtn = carousel.querySelector('.ihc-arrow--prev');
-  var nextBtn = carousel.querySelector('.ihc-arrow--next');
+  var panels = Array.prototype.slice.call(stage.querySelectorAll('.sp-panel'));
+  var layers = Array.prototype.slice.call(document.querySelectorAll('[data-depth]'));
+  var ticks = Array.prototype.slice.call(document.querySelectorAll('.sp-tick'));
+  var counterCurrent = document.getElementById('spCounterCurrent');
+  var bar = document.getElementById('spBar');
 
-  var AUTOPLAY_MS = 6500;
-  var current = 0;
-  var timer = null;
-  var paused = false;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function goTo(index) {
-    current = (index + slides.length) % slides.length;
-    slides.forEach(function (slide, i) {
-      var active = i === current;
-      slide.classList.toggle('is-active', active);
-      slide.setAttribute('aria-hidden', String(!active));
-    });
-    dots.forEach(function (dot, i) {
-      var active = i === current;
-      dot.classList.toggle('is-active', active);
-      if (active) {
-        dot.setAttribute('aria-current', 'true');
-      } else {
-        dot.removeAttribute('aria-current');
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  /* ── Revelado de paneles ── */
+  if ('IntersectionObserver' in window && !reducedMotion) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    panels.forEach(function (p) { revealObserver.observe(p); });
+  } else {
+    panels.forEach(function (p) { p.classList.add('is-in'); });
+  }
+
+  /* ── Panel activo: contador, rail y barra de avance ── */
+  var activeIndex = -1;
+
+  function updateActive() {
+    var mid = window.innerHeight / 2;
+    var best = -1;
+    var bestDistance = Infinity;
+
+    panels.forEach(function (panel, i) {
+      var rect = panel.getBoundingClientRect();
+      var distance = Math.abs(rect.top + rect.height / 2 - mid);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = i;
       }
     });
-    restartProgress();
-  }
 
-  function next() { goTo(current + 1); }
-  function prev() { goTo(current - 1); }
-
-  /* ── Barra de progreso del autoplay ── */
-  function restartProgress() {
-    if (!progress) return;
-    if (paused) {
-      progress.style.transition = 'none';
-      progress.style.width = '0';
-      return;
+    if (best !== activeIndex && best !== -1) {
+      activeIndex = best;
+      if (counterCurrent) counterCurrent.textContent = pad(best + 1);
+      ticks.forEach(function (tick, i) {
+        tick.classList.toggle('on', i === best);
+      });
     }
-    progress.style.transition = 'none';
-    progress.style.width = '0';
-    void progress.offsetWidth;
-    progress.style.transition = 'width ' + AUTOPLAY_MS + 'ms linear';
-    progress.style.width = '100%';
-  }
 
-  function play() {
-    stop();
-    timer = window.setInterval(function () {
-      if (!paused) next();
-    }, AUTOPLAY_MS);
-    restartProgress();
-  }
-
-  function stop() {
-    if (timer) {
-      window.clearInterval(timer);
-      timer = null;
-    }
-    if (progress) {
-      progress.style.transition = 'none';
-      progress.style.width = '0';
+    if (bar) {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - window.innerHeight;
+      var progress = max > 0 ? doc.scrollTop / max : 0;
+      bar.style.transform = 'scaleX(' + progress.toFixed(4) + ')';
     }
   }
 
-  /* ── Controles ── */
-  if (nextBtn) nextBtn.addEventListener('click', function () { next(); play(); });
-  if (prevBtn) prevBtn.addEventListener('click', function () { prev(); play(); });
-
-  dots.forEach(function (dot, i) {
-    dot.addEventListener('click', function () {
-      goTo(i);
-      play();
-    });
-  });
-
-  carousel.addEventListener('mouseenter', function () { paused = true; restartProgress(); });
-  carousel.addEventListener('mouseleave', function () { paused = false; restartProgress(); });
-  carousel.addEventListener('focusin', function () { paused = true; });
-  carousel.addEventListener('focusout', function () { paused = false; });
-
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) {
-      stop();
-    } else {
-      play();
-    }
-  });
-
-  carousel.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowRight') { next(); play(); }
-    if (e.key === 'ArrowLeft') { prev(); play(); }
-  });
-
-  /* ── Swipe táctil ── */
-  var touchX = null;
-
-  carousel.addEventListener('touchstart', function (e) {
-    if (e.touches.length === 1) {
-      touchX = e.touches[0].clientX;
-      paused = true;
-    }
-  }, { passive: true });
-
-  carousel.addEventListener('touchend', function (e) {
-    if (touchX === null) return;
-    var dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 45) {
-      if (dx < 0) { next(); } else { prev(); }
-    }
-    touchX = null;
-    paused = false;
-    play();
-  }, { passive: true });
-
-  /* ── Parallax al hacer scroll ── */
+  /* ── Parallax ── */
   var ticking = false;
 
   function updateParallax() {
     ticking = false;
+    if (reducedMotion) return;
 
-    var rect = carousel.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    var vh = window.innerHeight;
+    var factor = window.innerWidth < 760 ? 0.45 : 1;
 
-    var distance = (rect.top + rect.height / 2) - (window.innerHeight / 2);
+    layers.forEach(function (el) {
+      var panel = el.closest('.sp-panel');
+      if (!panel) return;
 
-    slides.forEach(function (slide, i) {
-      var img = slide.querySelector('.ihc-bg img');
-      if (img) {
-        img.style.transform =
-          'translate3d(0,' + (distance * 0.12).toFixed(2) + 'px,0)';
-      }
+      var rect = panel.getBoundingClientRect();
+      if (rect.bottom < -100 || rect.top > vh + 100) return;
 
-      var inner = slide.querySelector('.ihc-inner');
-      if (inner) {
-        var shift = distance * -0.06;
-        var fade = Math.max(0, 1 - Math.abs(distance) / (window.innerHeight * 0.9));
-        inner.style.transform = 'translate3d(0,' + shift.toFixed(2) + 'px,0)';
-        inner.style.opacity = fade.toFixed(3);
-      }
+      var offset = rect.top + rect.height / 2 - vh / 2;
+      var depth = parseFloat(el.getAttribute('data-depth')) || 0;
+      el.style.transform = 'translate3d(0,' + (offset * depth * factor).toFixed(1) + 'px,0)';
     });
   }
 
   function onScroll() {
     if (!ticking) {
       ticking = true;
-      window.requestAnimationFrame(updateParallax);
+      window.requestAnimationFrame(function () {
+        updateParallax();
+        updateActive();
+      });
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  /* ── Navegación por el rail ── */
+  ticks.forEach(function (tick, i) {
+    tick.addEventListener('click', function () {
+      if (!panels[i]) return;
+      panels[i].scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+    });
+  });
 
-  goTo(0);
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(function () {
+      updateParallax();
+      updateActive();
+    }, 120);
+  });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
   updateParallax();
-  play();
+  updateActive();
 })();
