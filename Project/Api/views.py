@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 
 def Home(request):
-    return render(request, 'Home.html')
+    return render(request, 'AirSenseClassic.html')
 
 def HomeAI(request):
-    return render(request, 'HomeAI.html')
+    return render(request, 'AirSenseAI.html')
 
 def HomeBeta(request):
-    return render(request, 'HomeBeta.html')
+    return render(request, 'Inicio.html')
 
 def dashboard(request):
     return redirect('dashboard:home')
