@@ -4,6 +4,15 @@
   padding: 0;
 }
 
+/* Red de seguridad responsive: ninguna imagen puede desbordar su contenedor */
+img, svg, video, iframe {
+  max-width: 100%;
+}
+
+/* NOTA: este sitio ignora prefers-reduced-motion a propósito.
+   No hay ninguna regla @media (prefers-reduced-motion) en el proyecto:
+   las animaciones y transiciones están siempre activas. */
+
 /* ── VARIABLES GLOBALES ──────────────────────────────────────────
    Colores y medidas reutilizables en todo el CSS.
    --nav-h: altura del header — tiene que coincidir con .logo-img height
@@ -214,9 +223,9 @@ nav {
   position: relative;
   display: inline-flex;
   align-items: center;
-  padding: 6px 16px;
+  padding: 6px 12px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 400;
   color: var(--c-mist);
   text-decoration: none;
@@ -1351,6 +1360,46 @@ html:not(.js) .ht-placeholder,
 }
 
 /* ════════ RESPONSIVE ════════ */
+/* Menú hamburguesa desde 1140px: evita que el nav se recorte con 6 enlaces */
+@media (max-width: 1140px) {
+  :root { --nav-h: 64px; }
+  .logo-img { height: 64px; }
+  .logo-text { font-size: 1.25rem; }
+  .logo-sub  { font-size: 0.7rem; }
+
+  .nav-toggle { display: inline-flex; }
+
+  header { overflow: visible; padding: 0 1.5rem; }
+
+  nav {
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: #EBF4F6;
+    border-bottom: 1px solid rgba(8,131,149,0.2);
+    box-shadow: 0 20px 34px -20px rgba(10,45,60,0.4);
+    padding: 8px 1rem 14px;
+    display: none;
+    z-index: 99;
+  }
+  header.nav-open nav { display: flex; }
+
+  .nav-link {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(8,131,149,0.12);
+    font-size: 1.05rem;
+  }
+  .nav-link:last-child { border-bottom: none; }
+  .nav-link::after { display: none; }
+
+  header.nav-open .nav-toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  header.nav-open .nav-toggle-bar:nth-child(2) { opacity: 0; }
+  header.nav-open .nav-toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+}
+
 @media (max-width: 1100px) {
   .hw-grid { grid-template-columns: repeat(3, 1fr); }
 }

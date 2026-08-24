@@ -1,0 +1,147 @@
+/* ── AIRSENSE · GALERÍA ────────────────────────────────────────────── */
+
+.page-galeria main { padding-top: var(--nav-h); }
+
+.galeria-section { padding-bottom: 4rem; }
+
+.galeria-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  color: var(--c-navy);
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="dark"] .galeria-desc { color: #E8F3F5; }
+
+/* ══ GRILLA ══════════════════════════════════════════════════════════ */
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.galeria-item {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(8, 131, 149, 0.18);
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(10, 76, 96, 0.07);
+  cursor: zoom-in;
+  transition: translate 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.galeria-item:hover {
+  translate: 0 -5px;
+  border-color: rgba(8, 131, 149, 0.5);
+  box-shadow: 0 14px 34px rgba(6, 32, 43, 0.16);
+}
+
+.galeria-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: filter 0.35s ease;
+}
+
+.galeria-item:hover img { filter: brightness(1.05); }
+
+[data-theme="dark"] .galeria-item {
+  background: #16222a;
+  border-color: rgba(46, 196, 219, 0.2);
+}
+
+[data-theme="dark"] .galeria-item:hover {
+  border-color: rgba(46, 196, 219, 0.55);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+}
+
+/* ══ CARPETAS VACÍAS ════════════════════════════════════════════════ */
+.galeria-empty {
+  border: 1px dashed rgba(8, 131, 149, 0.35);
+  border-radius: 16px;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: #3E6570;
+  background: rgba(8, 131, 149, 0.04);
+}
+
+[data-theme="dark"] .galeria-empty {
+  border-color: rgba(46, 196, 219, 0.3);
+  color: #9DC7CF;
+  background: rgba(46, 196, 219, 0.05);
+}
+
+.galeria-empty p { margin: 0; font-size: 0.95rem; }
+
+/* ══ LIGHTBOX ═══════════════════════════════════════════════════════ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.4rem, 2vw, 1.5rem);
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(4, 14, 19, 0.92);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox.open { opacity: 1; visibility: visible; }
+
+.lb-figure {
+  margin: 0;
+  max-width: min(1000px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lb-figure img {
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+.lb-caption {
+  text-align: center;
+  color: rgba(235, 244, 246, 0.75);
+  font-size: 0.85rem;
+}
+
+.lb-close,
+.lb-nav {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(123, 178, 178, 0.35);
+  background: rgba(13, 21, 24, 0.6);
+  color: #EBF4F6;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.lb-close:hover,
+.lb-nav:hover { background: var(--c-teal); color: #fff; }
+
+.lb-nav:active { transform: scale(0.94); }
+
+.lb-close { position: absolute; top: 18px; right: 18px; }
+
+@media (max-width: 600px) {
+  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); }
+  .lb-prev { left: 10px; }
+  .lb-next { right: 10px; }
+  .lb-figure img { max-height: calc(100vh - 180px); }
+}

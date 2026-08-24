@@ -17,3 +17,6 @@ def historial(request):
 
 def documentacion(request):
     return render(request, 'Pages/documentacion.html')
+
+def galeria(request):
+    return render(request, 'Pages/Galeria.html')
